@@ -84,10 +84,16 @@
 
         .counter-animate { transition: all 0.3s ease; }
         .counter-pop { transform: scale(1.25); color: var(--popcorn-red); font-weight: bold; }
+
+        .tab-btn.active {
+            border-bottom: 3px solid var(--popcorn-red);
+            color: var(--popcorn-red);
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center p-4">
 
+    <!-- Modal Notification -->
     <div id="alert-modal" class="custom-modal">
         <div class="bg-white p-6 rounded-2xl shadow-2xl max-w-sm w-full text-center">
             <h4 id="modal-title" class="brand-font text-2xl mb-2 text-red-600">Notice</h4>
@@ -104,6 +110,7 @@
 
     <main class="w-full max-w-md">
         
+        <!-- Quick Stats -->
         <section class="mb-4 grid grid-cols-2 gap-3">
             <div class="bg-white/90 backdrop-blur p-4 rounded-2xl text-center shadow-sm border border-white">
                 <p class="text-[10px] uppercase font-bold text-gray-400">Tickets Popped</p>
@@ -115,6 +122,7 @@
             </div>
         </section>
 
+        <!-- User View: Entry -->
         <section id="view-raffle" class="ticket-card p-8 border-t-8 border-red-600">
             <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">Lucky Code?</h2>
             <p class="text-gray-500 text-center text-sm mb-8">Enter the code from your pack to check your prize.</p>
@@ -144,6 +152,7 @@
             </div>
         </section>
 
+        <!-- User View: Result -->
         <section id="view-result" class="hidden ticket-card p-8 border-t-8 border-red-600 text-center">
             <div id="result-icon" class="text-7xl mb-4"></div>
             <h3 id="result-title" class="brand-font text-5xl mb-2"></h3>
@@ -160,8 +169,12 @@
             </div>
         </section>
 
+        <!-- Admin Login -->
         <section id="view-admin-login" class="hidden ticket-card p-8 border-t-8 border-gray-800">
-            <h2 class="brand-font text-3xl text-center mb-6">Staff Entry</h2>
+            <div class="text-center mb-6">
+                <i data-lucide="shield-lock" class="w-12 h-12 mx-auto text-gray-400 mb-2"></i>
+                <h2 class="brand-font text-3xl">Staff Entry</h2>
+            </div>
             <div class="space-y-4">
                 <input type="password" id="adminPass" placeholder="Admin Password" 
                     class="w-full p-4 border rounded-xl text-center outline-none focus:border-red-500">
@@ -172,48 +185,79 @@
             </div>
         </section>
 
-        <section id="view-admin-dashboard" class="hidden ticket-card p-6 border-t-8 border-green-600">
-            <div class="flex justify-between items-center mb-6">
+        <!-- Admin Dashboard -->
+        <section id="view-admin-dashboard" class="hidden ticket-card p-0 border-t-8 border-green-600">
+            <div class="flex justify-between items-center p-6 bg-gray-50 border-b">
                 <h2 class="brand-font text-3xl">Staff Control</h2>
-                <button onclick="showView('view-raffle')" class="text-red-500 text-xl font-bold">&times;</button>
+                <button onclick="showView('view-raffle')" class="text-red-500 text-xl font-bold p-2">&times;</button>
             </div>
 
-            <div class="bg-gray-50 p-4 rounded-xl mb-6">
-                <h3 class="text-xs font-bold text-gray-400 uppercase mb-3">Code Generator</h3>
-                <div class="grid grid-cols-2 gap-2 mb-3">
-                    <input type="number" id="genQty" value="5" min="1" max="50" class="p-2 border rounded text-sm">
-                    <select id="genWinner" class="p-2 border rounded text-sm">
-                        <option value="true">Winner</option>
-                        <option value="false">Non-Winner</option>
-                    </select>
+            <div class="p-6">
+                <div class="bg-gray-100/50 p-4 rounded-xl mb-6 border-2 border-dashed border-gray-200">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-3 flex items-center gap-2">
+                        <i data-lucide="plus-circle" class="w-3 h-3"></i> Quick Generate
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                        <div class="space-y-1">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Quantity</label>
+                            <input type="number" id="genQty" value="5" min="1" max="50" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Type</label>
+                            <select id="genWinner" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                                <option value="true">Winner 🏆</option>
+                                <option value="false">Non-Winner 🍿</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-1 mb-4">
+                        <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Prize Description</label>
+                        <input type="text" id="genPrize" placeholder="e.g. 1 Free Soda Pack" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                    </div>
+                    <button onclick="generateCodes()" id="genBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-md transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                        <i data-lucide="wand-2" class="w-4 h-4"></i>
+                        CREATE NEW BATCH
+                    </button>
                 </div>
-                <input type="text" id="genPrize" placeholder="Prize (e.g. Free Soda)" class="w-full p-2 border rounded text-sm mb-3">
-                <button onclick="generateCodes()" id="genBtn" class="w-full bg-green-600 text-white font-bold py-2 rounded text-sm disabled:opacity-50">
-                    CREATE CODES
-                </button>
-            </div>
 
-            <div class="max-h-[300px] overflow-y-auto no-scrollbar border-t">
-                <table class="w-full text-left text-[11px]">
-                    <thead class="sticky top-0 bg-white">
-                        <tr class="text-gray-400 uppercase">
-                            <th class="py-2">Code</th>
-                            <th class="py-2">Type</th>
-                            <th class="py-2">Prize</th>
-                            <th class="py-2">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-table-body"></tbody>
-                </table>
+                <!-- Tabs -->
+                <div class="flex border-b mb-4">
+                    <button onclick="switchAdminTab('new')" id="tab-new" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400 active">Recently Made</button>
+                    <button onclick="switchAdminTab('active')" id="tab-active" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400">Active</button>
+                    <button onclick="switchAdminTab('used')" id="tab-used" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400">Used History</button>
+                </div>
+
+                <!-- Table Content -->
+                <div class="max-h-[350px] overflow-y-auto no-scrollbar min-h-[150px]">
+                    <table class="w-full text-left text-[11px]">
+                        <thead class="sticky top-0 bg-white shadow-sm">
+                            <tr class="text-gray-400 uppercase">
+                                <th class="py-2 px-1">Code</th>
+                                <th class="py-2 px-1 text-center">Type</th>
+                                <th class="py-2 px-1">Prize Info</th>
+                                <th class="py-2 px-1 text-right">State</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-table-body" class="divide-y divide-gray-50">
+                            <!-- Injected rows -->
+                        </tbody>
+                    </table>
+                    <div id="admin-empty-state" class="hidden text-center py-10 text-gray-300">
+                        <i data-lucide="database" class="w-10 h-10 mx-auto mb-2 opacity-20"></i>
+                        <p class="text-xs uppercase font-bold tracking-widest">No codes found in this category</p>
+                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- Footer Actions -->
         <div class="mt-8 text-center space-y-4">
-            <button onclick="showView('view-admin-login')" class="text-xs font-bold text-red-800/40 uppercase tracking-widest">
-                Staff Dashboard
+            <button onclick="showView('view-admin-login')" class="text-xs font-bold text-red-800/40 uppercase tracking-widest hover:text-red-800 transition-colors">
+                Staff Access
             </button>
             <div>
                 <a href="https://wa.me/2347059806944" target="_blank" class="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-3 rounded-full font-bold text-sm shadow-md hover:scale-105 transition-transform">
+                    <i data-lucide="life-buoy" class="w-4 h-4"></i>
                     Need Help? Support
                 </a>
             </div>
@@ -225,7 +269,7 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // CONFIG
+        // CONFIG (Replace with your actual Firebase config if different)
         const firebaseConfig = {
             apiKey: "AIzaSyB9xd6dmQ9BLPnV-d3lHrY52efkxJGR0_Q",
             authDomain: "popmagic.firebaseapp.com",
@@ -237,19 +281,21 @@
         };
 
         const appId = 'popcorn-magic-v1';
-        const ADMIN_PASSWORD = "admin123";
+        const ADMIN_PASSWORD = "      "; // Your defined admin password
         const WHATSAPP_NUMBER = "2347059806944";
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        // Initialize Icons
         lucide.createIcons();
 
         let currentUser = null;
         let unsubscribeCodes = null;
         let unsubscribeStats = null;
+        let activeAdminTab = 'new';
+        let currentBatchCodes = []; // Memory of just generated codes in this session
+        let allCodesData = []; // Local mirror of all codes for fast switching
 
         const getCodesCollection = () => collection(db, 'artifacts', appId, 'public', 'data', 'raffle_codes');
 
@@ -266,21 +312,23 @@
         function updateStatus(isConnected) {
             const statusEl = document.getElementById('conn-status');
             const iconEl = document.getElementById('conn-icon');
-            
-            statusEl.innerText = isConnected ? "Connected" : "Disconnected";
-            iconEl.classList.remove('text-gray-400', 'text-green-500', 'text-red-500');
-            iconEl.classList.add(isConnected ? 'text-green-500' : 'text-red-500');
+            if (statusEl) statusEl.innerText = isConnected ? "Connected" : "Disconnected";
+            if (iconEl) {
+                iconEl.classList.remove('text-gray-400', 'text-green-500', 'text-red-500');
+                iconEl.classList.add(isConnected ? 'text-green-500' : 'text-red-500');
+            }
             lucide.createIcons();
         }
 
         initAuth();
 
-        // REAL-TIME STATS
+        // REAL-TIME STATS (Dashboard counters)
         function startStatsListener() {
             if (!currentUser) return;
             const q = query(getCodesCollection());
             unsubscribeStats = onSnapshot(q, (snapshot) => {
-                let poppedCount = 0; let winnersCount = 0;
+                let poppedCount = 0; 
+                let winnersCount = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     if (data.isUsed) {
@@ -295,17 +343,18 @@
 
         function updateStatUI(id, val) {
             const el = document.getElementById(id);
-            if (parseInt(el.innerText) !== val) {
+            if (el && parseInt(el.innerText) !== val) {
                 el.innerText = val;
                 el.classList.add('counter-pop');
                 setTimeout(() => el.classList.remove('counter-pop'), 800);
             }
         }
 
-        // NAVIGATION & UI
+        // NAVIGATION & UI SWITCHES
         window.showView = (viewId) => {
             ['view-raffle', 'view-result', 'view-admin-login', 'view-admin-dashboard'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
             });
             document.getElementById(viewId).classList.remove('hidden');
             lucide.createIcons();
@@ -314,6 +363,14 @@
             }
         };
 
+        window.switchAdminTab = (tab) => {
+            activeAdminTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            renderAdminTable();
+        };
+
+        // CORE RAFFLE LOGIC
         window.checkCode = async () => {
             if (!currentUser) return;
             const input = document.getElementById('raffleCode');
@@ -338,7 +395,9 @@
                 } else {
                     showToast("Invalid code!");
                 }
-            } catch (err) { showToast("System Error"); } finally {
+            } catch (err) { 
+                showToast("System Error"); 
+            } finally {
                 btn.disabled = false; btn.innerText = "CHECK CODE";
             }
         };
@@ -351,7 +410,7 @@
             const claimBtn = document.getElementById('claim-prize-btn');
 
             if (data.isWinner) {
-                icon.innerText = "🌟";
+                icon.innerText = "🏆";
                 title.innerText = "WINNER!";
                 title.className = "brand-font text-6xl text-yellow-500 mb-2";
                 prize.innerText = data.prize;
@@ -370,6 +429,7 @@
             lucide.createIcons();
         }
 
+        // ADMIN LOGIC
         window.handleAdminLogin = () => {
             if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
                 showView('view-admin-dashboard');
@@ -389,35 +449,79 @@
             if (isNaN(qty) || qty <= 0) return;
             btn.disabled = true;
 
+            // Clear previous "new batch" memory to start fresh
+            currentBatchCodes = [];
+
             try {
                 for (let i = 0; i < qty; i++) {
                     const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
                     await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raffle_codes', randomCode), {
-                        code: randomCode, isWinner, prize, isUsed: false, createdAt: Date.now()
+                        code: randomCode, 
+                        isWinner, 
+                        prize, 
+                        isUsed: false, 
+                        createdAt: Date.now()
                     });
+                    currentBatchCodes.push(randomCode); // Track these as the "new" ones
                 }
-                window.showAlert("Success", `Created ${qty} new codes.`);
-            } catch (err) { window.showAlert("Error", "Could not save codes."); } finally { btn.disabled = false; }
+                switchAdminTab('new'); // Automatically switch to "New" tab
+                window.showAlert("Success", `Created ${qty} new codes. They are visible in 'Recently Made'.`);
+            } catch (err) { 
+                window.showAlert("Error", "Could not save codes."); 
+            } finally { 
+                btn.disabled = false; 
+            }
         };
 
         function listenToCodes() {
             unsubscribeCodes = onSnapshot(query(getCodesCollection()), (snapshot) => {
-                const tbody = document.getElementById('admin-table-body');
-                tbody.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const c = doc.data();
-                    tbody.insertAdjacentHTML('beforeend', `
-                        <tr class="border-b">
-                            <td class="py-2 font-mono font-bold">${c.code}</td>
-                            <td class="py-2">${c.isWinner ? '🏆' : '💨'}</td>
-                            <td class="py-2 text-gray-500">${c.prize || '-'}</td>
-                            <td class="py-2 ${c.isUsed ? 'text-red-500' : 'text-green-500'} font-bold">${c.isUsed ? 'USED' : 'ACTIVE'}</td>
-                        </tr>
-                    `);
-                });
+                allCodesData = [];
+                snapshot.forEach(doc => allCodesData.push(doc.data()));
+                renderAdminTable();
             });
         }
 
+        function renderAdminTable() {
+            const tbody = document.getElementById('admin-table-body');
+            const emptyState = document.getElementById('admin-empty-state');
+            tbody.innerHTML = '';
+            
+            let filtered = [];
+            if (activeAdminTab === 'new') {
+                filtered = allCodesData.filter(c => currentBatchCodes.includes(c.code));
+            } else if (activeAdminTab === 'active') {
+                // Not used AND not in the current generation batch
+                filtered = allCodesData.filter(c => !c.isUsed && !currentBatchCodes.includes(c.code));
+            } else if (activeAdminTab === 'used') {
+                filtered = allCodesData.filter(c => c.isUsed);
+            }
+
+            // Sort by creation date (newest first)
+            filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filtered.forEach(c => {
+                    const typeIcon = c.isWinner ? '🏆' : '🍿';
+                    const typeColor = c.isWinner ? 'text-yellow-600 font-bold' : 'text-gray-400';
+                    const statusText = c.isUsed ? 'USED' : 'ACTIVE';
+                    const statusColor = c.isUsed ? 'text-red-500' : 'text-green-500';
+                    
+                    tbody.insertAdjacentHTML('beforeend', `
+                        <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                            <td class="py-3 px-1 font-mono font-bold text-gray-800">${c.code}</td>
+                            <td class="py-3 px-1 text-center ${typeColor}">${typeIcon}</td>
+                            <td class="py-3 px-1 text-gray-500 truncate max-w-[80px]">${c.prize || '-'}</td>
+                            <td class="py-3 px-1 text-right font-bold ${statusColor}">${statusText}</td>
+                        </tr>
+                    `);
+                });
+            }
+        }
+
+        // GLOBAL HELPERS
         window.showAlert = (title, msg) => {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-message').innerText = msg;
@@ -425,9 +529,11 @@
         };
 
         window.closeModal = () => document.getElementById('alert-modal').classList.remove('active');
+        
         window.showToast = (msg) => {
             const toast = document.getElementById('error-toast');
-            toast.innerText = msg; toast.classList.remove('hidden');
+            toast.innerText = msg; 
+            toast.classList.remove('hidden');
             setTimeout(() => toast.classList.add('hidden'), 3000);
         };
     </script>
