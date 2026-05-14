@@ -220,6 +220,18 @@
                     </button>
                 </div>
 
+                <!-- Admin Status Counters -->
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="bg-green-50 p-3 rounded-xl border border-green-100 text-center">
+                        <p class="text-[9px] uppercase font-bold text-green-600">Active Codes</p>
+                        <p id="admin-stat-active" class="text-xl font-bold text-green-700">0</p>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded-xl border border-red-100 text-center">
+                        <p class="text-[9px] uppercase font-bold text-red-600">Used Codes</p>
+                        <p id="admin-stat-used" class="text-xl font-bold text-red-700">0</p>
+                    </div>
+                </div>
+
                 <!-- Tabs -->
                 <div class="flex border-b mb-4">
                     <button onclick="switchAdminTab('new')" id="tab-new" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400 active">Recently Made</button>
@@ -484,6 +496,13 @@
         function renderAdminTable() {
             const tbody = document.getElementById('admin-table-body');
             const emptyState = document.getElementById('admin-empty-state');
+            
+            // Update the new admin stats
+            const activeTotalCount = allCodesData.filter(c => !c.isUsed).length;
+            const usedTotalCount = allCodesData.filter(c => c.isUsed).length;
+            document.getElementById('admin-stat-active').innerText = activeTotalCount;
+            document.getElementById('admin-stat-used').innerText = usedTotalCount;
+
             tbody.innerHTML = '';
             
             let filtered = [];
