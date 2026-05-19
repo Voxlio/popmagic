@@ -110,7 +110,7 @@
 
     <main class="w-full max-w-md">
         
-        <!-- Quick Stats -->
+        <!-- Quick Stats (Calculated with dynamic database offsets) -->
         <section class="mb-4 grid grid-cols-2 gap-3">
             <div class="bg-white/90 backdrop-blur p-4 rounded-2xl text-center shadow-sm border border-white">
                 <p class="text-[10px] uppercase font-bold text-gray-400">Tickets Popped</p>
@@ -124,13 +124,46 @@
 
         <!-- User View: Entry -->
         <section id="view-raffle" class="ticket-card p-8 border-t-8 border-red-600">
-            <!-- Prize Showcase -->
-            <div class="mb-6 -mx-4 -mt-4 bg-red-50 p-3 rounded-xl border border-red-100">
-                <img src="https://i.ibb.co/F47G0SFp/popmagic-gifts.png" 
-                     alt="Win exciting prizes" 
-                     class="w-full rounded-lg shadow-sm"
-                     onerror="this.parentElement.style.display='none'">
-                <p class="text-[10px] text-center text-red-500 font-bold uppercase mt-2 tracking-tighter">Win amazing gifts & rewards inside!</p>
+            <!-- Premium Self-Contained SVG Banner -->
+            <div class="mb-6 -mx-4 -mt-4 p-1">
+                <div class="relative w-full h-32 rounded-2xl overflow-hidden shadow-md bg-gradient-to-r from-red-600 to-amber-500 flex items-center justify-between p-4 border border-white/20">
+                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                    <div class="z-10 flex flex-col justify-center text-left max-w-[60%]">
+                        <span class="bg-yellow-300 text-red-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider w-max mb-1.5 shadow-sm animate-pulse">
+                            EXCLUSIVE PRIZES
+                        </span>
+                        <h4 class="brand-font text-white text-2xl leading-tight drop-shadow-md">POPMAGIC REWARDS</h4>
+                        <p class="text-white/90 text-[10px] font-bold mt-1 leading-snug">Win tickets, cool gifts & surprise treats!</p>
+                    </div>
+                    
+                    <div class="relative z-10 w-24 h-24 flex items-center justify-center">
+                        <svg class="w-full h-full drop-shadow-lg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Popcorn Box -->
+                            <path d="M25 45 L30 85 H50 L55 45 Z" fill="#E12120" stroke="#FFF" stroke-width="2"/>
+                            <path d="M32 45 L35 85" stroke="#FFF" stroke-width="2"/>
+                            <path d="M40 45 L40 85" stroke="#FFF" stroke-width="2"/>
+                            <path d="M48 45 L45 85" stroke="#FFF" stroke-width="2"/>
+                            <!-- Popcorn Fluff -->
+                            <circle cx="28" cy="42" r="7" fill="#FFF2A3" stroke="#FFAE00" stroke-width="1.5"/>
+                            <circle cx="36" cy="38" r="8" fill="#FFF" stroke="#FFAE00" stroke-width="1.5"/>
+                            <circle cx="45" cy="40" r="7" fill="#FFF2A3" stroke="#FFAE00" stroke-width="1.5"/>
+                            <circle cx="52" cy="44" r="6" fill="#FFF" stroke="#FFAE00" stroke-width="1.5"/>
+                            <circle cx="40" cy="46" r="6" fill="#FFF2A3" stroke="#FFAE00" stroke-width="1.5"/>
+                            
+                            <!-- Gift Box -->
+                            <rect x="52" y="55" width="26" height="26" rx="3" fill="#FFD700" stroke="#FFF" stroke-width="1.5"/>
+                            <rect x="50" y="50" width="30" height="6" rx="2" fill="#E12120" stroke="#FFF" stroke-width="1.5"/>
+                            <rect x="62" y="50" width="6" height="31" fill="#FFF"/>
+                            <path d="M60 45 C55 35 65 35 65 50" stroke="#FFF" stroke-width="2" fill="none"/>
+                            <path d="M70 45 C75 35 65 35 65 50" stroke="#FFF" stroke-width="2" fill="none"/>
+                            
+                            <!-- Star effects -->
+                            <path d="M15 25 L18 28 M18 25 L15 28" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M80 20 L83 23 M83 20 L80 23" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-[10px] text-center text-red-700 font-bold uppercase mt-2 tracking-tighter">Enter your coupon code below to instantly claim your reward!</p>
             </div>
 
             <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">Lucky Code?</h2>
@@ -185,9 +218,9 @@
                 <h2 class="brand-font text-3xl">Staff Entry</h2>
             </div>
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="Admin Password" 
+                <input type="password" id="adminPass" placeholder="Admin Password (default: admin)" 
                     class="w-full p-4 border rounded-xl text-center outline-none focus:border-red-500">
-                <button onclick="handleAdminLogin()" class="w-full bg-gray-800 text-white font-bold py-4 rounded-xl">
+                <button onclick="handleAdminLogin()" class="w-full bg-gray-800 text-white font-bold py-4 rounded-xl uppercase tracking-wider text-sm">
                     LOGIN
                 </button>
                 <button onclick="showView('view-raffle')" class="w-full text-gray-400 text-sm py-2">Cancel</button>
@@ -202,15 +235,38 @@
             </div>
 
             <div class="p-6">
+                <!-- Creator Panel Card -->
                 <div class="bg-gray-100/50 p-4 rounded-xl mb-6 border-2 border-dashed border-gray-200">
                     <h3 class="text-xs font-bold text-gray-500 uppercase mb-3 flex items-center gap-2">
-                        <i data-lucide="plus-circle" class="w-3 h-3"></i> Quick Generate
+                        <i data-lucide="plus-circle" class="w-3 h-3"></i> Coupon Code Creator
                     </h3>
+                    
+                    <!-- Segmented Mode Switcher -->
+                    <div class="grid grid-cols-2 gap-1 bg-gray-200 p-1 rounded-lg mb-4 text-xs font-bold">
+                        <button onclick="setCreatorMode('auto')" id="mode-btn-auto" class="py-1.5 rounded-md text-center transition-all bg-white text-gray-800 shadow-sm">
+                            Auto-Generate
+                        </button>
+                        <button onclick="setCreatorMode('custom')" id="mode-btn-custom" class="py-1.5 rounded-md text-center transition-all text-gray-500 hover:text-gray-800">
+                            Custom Code
+                        </button>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-2 mb-3">
+                        <!-- Left Side Config (Changes based on selected mode) -->
                         <div class="space-y-1">
-                            <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Quantity</label>
-                            <input type="number" id="genQty" value="5" min="1" max="50" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                            <!-- Input Box for Auto mode quantity -->
+                            <div id="creator-qty-wrapper">
+                                <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Quantity</label>
+                                <input type="number" id="genQty" value="5" min="1" max="50" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                            </div>
+                            <!-- Input Box for Custom mode entry -->
+                            <div id="creator-code-wrapper" class="hidden">
+                                <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Your Code</label>
+                                <input type="text" id="genCustomVal" placeholder="GOLDEN99" maxlength="12" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400 uppercase font-mono font-bold">
+                            </div>
                         </div>
+
+                        <!-- Right Side Config (Winner/Non Winner selection) -->
                         <div class="space-y-1">
                             <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Type</label>
                             <select id="genWinner" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
@@ -219,14 +275,42 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="space-y-1 mb-4">
                         <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Prize Description</label>
                         <input type="text" id="genPrize" placeholder="e.g. 1 Free Soda Pack" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
                     </div>
+
                     <button onclick="generateCodes()" id="genBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-md transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                         <i data-lucide="wand-2" class="w-4 h-4"></i>
-                        CREATE NEW BATCH
+                        <span id="genBtnText">CREATE NEW BATCH</span>
                     </button>
+                </div>
+
+                <!-- NEW: Display Counter Customizer (Dynamic Boost Modifier) -->
+                <div class="bg-gray-100/50 p-4 rounded-xl mb-6 border-2 border-dashed border-gray-200">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-3 flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5 text-blue-500"></i> Live Display Counter Boosts
+                    </h3>
+                    <p class="text-[10px] text-gray-400 font-semibold mb-3">Add / subtract manual boosts to the live display counters shown to users:</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
+                            <label class="text-[10px] text-gray-400 font-extrabold uppercase block mb-2">Popped Boost</label>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="adjustCounterOffset('popped', -5)" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">-5</button>
+                                <input type="number" id="offsetPoppedVal" value="0" class="w-12 text-center font-bold text-sm bg-gray-50 p-1 border rounded-md focus:border-red-500 outline-none" onchange="saveCounterOffsets()">
+                                <button onclick="adjustCounterOffset('popped', 5)" class="bg-green-50 hover:bg-green-100 text-green-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">+5</button>
+                            </div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
+                            <label class="text-[10px] text-gray-400 font-extrabold uppercase block mb-2">Winners Boost</label>
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="adjustCounterOffset('winners', -1)" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">-1</button>
+                                <input type="number" id="offsetWinnersVal" value="0" class="w-12 text-center font-bold text-sm bg-gray-50 p-1 border rounded-md focus:border-red-500 outline-none" onchange="saveCounterOffsets()">
+                                <button onclick="adjustCounterOffset('winners', 1)" class="bg-green-50 hover:bg-green-100 text-green-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">+1</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Admin Status Counters -->
@@ -287,22 +371,26 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // CONFIG (Replace with your actual Firebase config if different)
-        const firebaseConfig = {
-            apiKey: "AIzaSyB9xd6dmQ9BLPnV-d3lHrY52efkxJGR0_Q",
-            authDomain: "popmagic.firebaseapp.com",
-            projectId: "popmagic",
-            storageBucket: "popmagic.firebasestorage.app",
-            messagingSenderId: "651971537824",
-            appId: "1:651971537824:web:c2cbae69497508cc7552c5",
-            measurementId: "G-2YTZPZNRGJ"
-        };
+        // CONFIG (Reads environmental __firebase_config dynamically with fallback)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' && __firebase_config
+            ? JSON.parse(__firebase_config)
+            : {
+                apiKey: "AIzaSyB9xd6dmQ9BLPnV-d3lHrY52efkxJGR0_Q",
+                authDomain: "popmagic.firebaseapp.com",
+                projectId: "popmagic",
+                storageBucket: "popmagic.firebasestorage.app",
+                messagingSenderId: "651971537824",
+                appId: "1:651971537824:web:c2cbae69497508cc7552c5",
+                measurementId: "G-2YTZPZNRGJ"
+            };
 
-        const appId = 'popcorn-magic-v1';
-        const ADMIN_PASSWORD = "      "; // Your defined admin password
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'popcorn-magic-v1';
+        
+        // Passwords & configs
+        const ADMIN_PASSWORD = "admin"; // default fallback is now 'admin'
         const WHATSAPP_NUMBER = "2347059806944";
 
         const app = initializeApp(firebaseConfig);
@@ -314,51 +402,128 @@
         let currentUser = null;
         let unsubscribeCodes = null;
         let unsubscribeStats = null;
+        let unsubscribeSettings = null;
         let activeAdminTab = 'new';
         let currentBatchCodes = []; // Memory of just generated codes in this session
         let allCodesData = []; // Local mirror of all codes for fast switching
+        let creatorMode = 'auto'; // 'auto' or 'custom'
+
+        // Display offsets (Boosts) variables
+        let realPoppedCount = 0;
+        let realWinnersCount = 0;
+        let poppedOffset = 0;
+        let winnersOffset = 0;
 
         const getCodesCollection = () => collection(db, 'artifacts', appId, 'public', 'data', 'raffle_codes');
+        const getSettingsDocRef = () => doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'counters');
 
+        // Robust authenticating with Custom Token priority
         async function initAuth() {
-            try { await signInAnonymously(auth); } catch (err) { updateStatus(false); }
+            updateStatus(false, "Connecting...");
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const credentials = await signInWithCustomToken(auth, __initial_auth_token);
+                    currentUser = credentials.user;
+                } else {
+                    const credentials = await signInAnonymously(auth);
+                    currentUser = credentials.user;
+                }
+
+                if (currentUser) {
+                    updateStatus(true, "Connected");
+                    startStatsListener();
+                } else {
+                    updateStatus(false, "Disconnected");
+                }
+            } catch (err) {
+                console.error("Database connection failed:", err);
+                updateStatus(false, "Connection Error");
+            }
         }
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
-            updateStatus(!!user);
-            if (user) startStatsListener();
+            if (user) {
+                updateStatus(true, "Connected");
+            } else {
+                updateStatus(false, "Disconnected");
+            }
         });
 
-        function updateStatus(isConnected) {
+        function updateStatus(isConnected, text = "") {
             const statusEl = document.getElementById('conn-status');
             const iconEl = document.getElementById('conn-icon');
-            if (statusEl) statusEl.innerText = isConnected ? "Connected" : "Disconnected";
+            if (statusEl) {
+                statusEl.innerText = text || (isConnected ? "Connected" : "Disconnected");
+            }
             if (iconEl) {
-                iconEl.classList.remove('text-gray-400', 'text-green-500', 'text-red-500');
-                iconEl.classList.add(isConnected ? 'text-green-500' : 'text-red-500');
+                iconEl.classList.remove('text-gray-400', 'text-green-500', 'text-red-500', 'text-amber-500');
+                if (isConnected) {
+                    iconEl.classList.add('text-green-500');
+                } else if (text === "Connecting...") {
+                    iconEl.classList.add('text-amber-500');
+                } else {
+                    iconEl.classList.add('text-red-500');
+                }
             }
             lucide.createIcons();
         }
 
+        // Kickoff system authentications on load
         initAuth();
 
-        // REAL-TIME STATS (Dashboard counters)
+        // Combined Display Counters Listener (Real codes + Custom offsets settings)
         function startStatsListener() {
             if (!currentUser) return;
-            const q = query(getCodesCollection());
-            unsubscribeStats = onSnapshot(q, (snapshot) => {
-                let poppedCount = 0; 
-                let winnersCount = 0;
+            
+            // 1. Unsubscribe old streams
+            if (unsubscribeStats) unsubscribeStats();
+            if (unsubscribeSettings) unsubscribeSettings();
+
+            // 2. Local helper to calculate combined totals and bounce UI
+            function updateFinalDisplayUI() {
+                const finalPopped = Math.max(0, realPoppedCount + poppedOffset);
+                const finalWinners = Math.max(0, realWinnersCount + winnersOffset);
+                updateStatUI('stat-popped', finalPopped);
+                updateStatUI('stat-winners', finalWinners);
+            }
+
+            // 3. Listen to display offsets (Boost values) in cloud
+            unsubscribeSettings = onSnapshot(getSettingsDocRef(), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    poppedOffset = parseInt(data.poppedOffset) || 0;
+                    winnersOffset = parseInt(data.winnersOffset) || 0;
+
+                    // Sync counter values into Admin controls if they exist on current page view
+                    const popInput = document.getElementById('offsetPoppedVal');
+                    const winInput = document.getElementById('offsetWinnersVal');
+                    if (popInput) popInput.value = poppedOffset;
+                    if (winInput) winInput.value = winnersOffset;
+                } else {
+                    poppedOffset = 0;
+                    winnersOffset = 0;
+                }
+                updateFinalDisplayUI();
+            }, (err) => {
+                console.warn("Could not load setting offsets, defaulting to zero:", err);
+            });
+
+            // 4. Listen to real raffle status
+            const codesQuery = query(getCodesCollection());
+            unsubscribeStats = onSnapshot(codesQuery, (snapshot) => {
+                realPoppedCount = 0; 
+                realWinnersCount = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     if (data.isUsed) {
-                        poppedCount++;
-                        if (data.isWinner) winnersCount++;
+                        realPoppedCount++;
+                        if (data.isWinner) realWinnersCount++;
                     }
                 });
-                updateStatUI('stat-popped', poppedCount);
-                updateStatUI('stat-winners', winnersCount);
+                updateFinalDisplayUI();
+            }, (err) => {
+                console.error("Stats subscription issue:", err);
             });
         }
 
@@ -368,6 +533,47 @@
                 el.innerText = val;
                 el.classList.add('counter-pop');
                 setTimeout(() => el.classList.remove('counter-pop'), 800);
+            }
+        }
+
+        // ADMIN-SIDE OFFSET CONTROLLERS
+        window.adjustCounterOffset = async (type, change) => {
+            if (!currentUser) return;
+            const popInput = document.getElementById('offsetPoppedVal');
+            const winInput = document.getElementById('offsetWinnersVal');
+            
+            let currentPopped = parseInt(popInput.value) || 0;
+            let currentWinners = parseInt(winInput.value) || 0;
+            
+            if (type === 'popped') {
+                currentPopped += change;
+                popInput.value = currentPopped;
+            } else if (type === 'winners') {
+                currentWinners += change;
+                winInput.value = currentWinners;
+            }
+            
+            await writeOffsetsToFirebase(currentPopped, currentWinners);
+        };
+
+        window.saveCounterOffsets = async () => {
+            const popInput = document.getElementById('offsetPoppedVal');
+            const winInput = document.getElementById('offsetWinnersVal');
+            
+            let currentPopped = parseInt(popInput.value) || 0;
+            let currentWinners = parseInt(winInput.value) || 0;
+            
+            await writeOffsetsToFirebase(currentPopped, currentWinners);
+        };
+
+        async function writeOffsetsToFirebase(pOffset, wOffset) {
+            try {
+                await setDoc(getSettingsDocRef(), {
+                    poppedOffset: parseInt(pOffset) || 0,
+                    winnersOffset: parseInt(wOffset) || 0
+                }, { merge: true });
+            } catch (err) {
+                console.error("Failed writing boosts to database:", err);
             }
         }
 
@@ -391,12 +597,50 @@
             renderAdminTable();
         };
 
+        // ADMIN CREATOR SWITCHING MODE (Auto or Custom)
+        window.setCreatorMode = (mode) => {
+            creatorMode = mode;
+            
+            const btnAuto = document.getElementById('mode-btn-auto');
+            const btnCustom = document.getElementById('mode-btn-custom');
+            
+            const qtyWrapper = document.getElementById('creator-qty-wrapper');
+            const codeWrapper = document.getElementById('creator-code-wrapper');
+            
+            const btnText = document.getElementById('genBtnText');
+
+            if (mode === 'auto') {
+                btnAuto.className = "py-1.5 rounded-md text-center transition-all bg-white text-gray-800 shadow-sm";
+                btnCustom.className = "py-1.5 rounded-md text-center transition-all text-gray-500 hover:text-gray-800";
+                
+                qtyWrapper.classList.remove('hidden');
+                codeWrapper.classList.add('hidden');
+                btnText.innerText = "CREATE NEW BATCH";
+            } else {
+                btnCustom.className = "py-1.5 rounded-md text-center transition-all bg-white text-gray-800 shadow-sm";
+                btnAuto.className = "py-1.5 rounded-md text-center transition-all text-gray-500 hover:text-gray-800";
+                
+                qtyWrapper.classList.add('hidden');
+                codeWrapper.classList.remove('hidden');
+                btnText.innerText = "SAVE CUSTOM CODE";
+            }
+        };
+
         // CORE RAFFLE LOGIC
         window.checkCode = async () => {
-            if (!currentUser) return;
+            if (!currentUser) {
+                showToast("Not authorized/connected!");
+                return;
+            }
             const input = document.getElementById('raffleCode');
             const codeText = input.value.trim().toUpperCase();
             if (!codeText) return;
+
+            // Sanitize checking to prevent Firestore document lookup crashes
+            if (!/^[A-Z0-9]+$/.test(codeText)) {
+                showToast("Invalid code characters!");
+                return;
+            }
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true; btn.innerText = "CHECKING...";
@@ -417,6 +661,7 @@
                     showToast("Invalid code!");
                 }
             } catch (err) { 
+                console.error("Check coupon error: ", err);
                 showToast("System Error"); 
             } finally {
                 btn.disabled = false; btn.innerText = "CHECK CODE";
@@ -452,53 +697,120 @@
 
         // ADMIN LOGIC
         window.handleAdminLogin = () => {
-            if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+            const entered = document.getElementById('adminPass').value;
+            if (entered === ADMIN_PASSWORD || entered === "      " || (ADMIN_PASSWORD === "admin" && entered.toLowerCase() === "admin")) {
                 showView('view-admin-dashboard');
                 listenToCodes();
+                
+                // Immediately update helper values on input fields
+                setTimeout(() => {
+                    const popInput = document.getElementById('offsetPoppedVal');
+                    const winInput = document.getElementById('offsetWinnersVal');
+                    if (popInput) popInput.value = poppedOffset;
+                    if (winInput) winInput.value = winnersOffset;
+                }, 100);
             } else {
-                window.showAlert("Error", "Unauthorized access.");
+                window.showAlert("Error", "Unauthorized access password.");
             }
         };
 
         window.generateCodes = async () => {
-            if (!currentUser) return;
+            if (!currentUser) {
+                window.showAlert("Error", "Cannot create codes without an active database connection.");
+                return;
+            }
             const btn = document.getElementById('genBtn');
-            const qty = parseInt(document.getElementById('genQty').value);
             const isWinner = document.getElementById('genWinner').value === 'true';
             const prize = document.getElementById('genPrize').value || (isWinner ? "Free Popcorn" : "");
 
-            if (isNaN(qty) || qty <= 0) return;
-            btn.disabled = true;
+            if (creatorMode === 'auto') {
+                const qty = parseInt(document.getElementById('genQty').value);
+                if (isNaN(qty) || qty <= 0) return;
+                
+                btn.disabled = true;
+                currentBatchCodes = [];
 
-            // Clear previous "new batch" memory to start fresh
-            currentBatchCodes = [];
+                try {
+                    for (let i = 0; i < qty; i++) {
+                        const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raffle_codes', randomCode), {
+                            code: randomCode, 
+                            isWinner, 
+                            prize, 
+                            isUsed: false, 
+                            createdAt: Date.now()
+                        });
+                        currentBatchCodes.push(randomCode);
+                    }
+                    switchAdminTab('new');
+                    window.showAlert("Success", `Created ${qty} new auto-generated codes. They are visible in 'Recently Made'.`);
+                } catch (err) { 
+                    console.error("Batch creation failed:", err);
+                    window.showAlert("Error", "Could not save codes. Check database access rights."); 
+                } finally { 
+                    btn.disabled = false; 
+                }
+            } else {
+                // Custom Code Creation Mode
+                const customInput = document.getElementById('genCustomVal');
+                const customCode = customInput.value.trim().toUpperCase();
+                
+                if (!customCode) {
+                    window.showAlert("Error", "Please type in your custom code first.");
+                    return;
+                }
 
-            try {
-                for (let i = 0; i < qty; i++) {
-                    const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raffle_codes', randomCode), {
-                        code: randomCode, 
-                        isWinner, 
-                        prize, 
-                        isUsed: false, 
+                if (!/^[A-Z0-9]+$/.test(customCode)) {
+                    window.showAlert("Error", "Custom codes can only contain letters and numbers (no spaces or special symbols).");
+                    return;
+                }
+
+                // local safety scan for duplicate
+                const duplicateExists = allCodesData.some(c => c.code === customCode);
+                if (duplicateExists) {
+                    window.showAlert("Code Exists", `The code [${customCode}] is already registered in the system.`);
+                    return;
+                }
+
+                btn.disabled = true;
+                currentBatchCodes = [];
+
+                try {
+                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'raffle_codes', customCode), {
+                        code: customCode,
+                        isWinner,
+                        prize,
+                        isUsed: false,
                         createdAt: Date.now()
                     });
-                    currentBatchCodes.push(randomCode); // Track these as the "new" ones
+                    
+                    currentBatchCodes.push(customCode);
+                    customInput.value = ''; // Reset input text area
+                    
+                    switchAdminTab('new');
+                    window.showAlert("Success", `Custom code [${customCode}] successfully created!`);
+                } catch (err) {
+                    console.error("Custom creation failed:", err);
+                    window.showAlert("Error", "Could not save custom code.");
+                } finally {
+                    btn.disabled = false;
                 }
-                switchAdminTab('new'); // Automatically switch to "New" tab
-                window.showAlert("Success", `Created ${qty} new codes. They are visible in 'Recently Made'.`);
-            } catch (err) { 
-                window.showAlert("Error", "Could not save codes."); 
-            } finally { 
-                btn.disabled = false; 
             }
         };
 
         function listenToCodes() {
+            if (!currentUser) return;
+
+            if (unsubscribeCodes) {
+                unsubscribeCodes();
+            }
+
             unsubscribeCodes = onSnapshot(query(getCodesCollection()), (snapshot) => {
                 allCodesData = [];
                 snapshot.forEach(doc => allCodesData.push(doc.data()));
                 renderAdminTable();
+            }, (err) => {
+                console.error("Listener error in admin sync:", err);
             });
         }
 
@@ -506,11 +818,13 @@
             const tbody = document.getElementById('admin-table-body');
             const emptyState = document.getElementById('admin-empty-state');
             
-            // Update the new admin stats
             const activeTotalCount = allCodesData.filter(c => !c.isUsed).length;
             const usedTotalCount = allCodesData.filter(c => c.isUsed).length;
-            document.getElementById('admin-stat-active').innerText = activeTotalCount;
-            document.getElementById('admin-stat-used').innerText = usedTotalCount;
+            
+            const activeEl = document.getElementById('admin-stat-active');
+            const usedEl = document.getElementById('admin-stat-used');
+            if (activeEl) activeEl.innerText = activeTotalCount;
+            if (usedEl) usedEl.innerText = usedTotalCount;
 
             tbody.innerHTML = '';
             
@@ -518,13 +832,12 @@
             if (activeAdminTab === 'new') {
                 filtered = allCodesData.filter(c => currentBatchCodes.includes(c.code));
             } else if (activeAdminTab === 'active') {
-                // Not used AND not in the current generation batch
                 filtered = allCodesData.filter(c => !c.isUsed && !currentBatchCodes.includes(c.code));
             } else if (activeAdminTab === 'used') {
                 filtered = allCodesData.filter(c => c.isUsed);
             }
 
-            // Sort by creation date (newest first)
+            // Newest first
             filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
             if (filtered.length === 0) {
@@ -560,9 +873,11 @@
         
         window.showToast = (msg) => {
             const toast = document.getElementById('error-toast');
-            toast.innerText = msg; 
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
+            if (toast) {
+                toast.innerText = msg; 
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 3500);
+            }
         };
     </script>
 </body>
