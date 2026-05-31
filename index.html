@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popcorn Magic Raffle - Live</title>
+    <title>Popcorn Magic Hub - Fun, Games & Raffle</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -12,60 +12,90 @@
         :root {
             --popcorn-yellow: #FFD700;
             --popcorn-red: #E12120;
+            --popcorn-cream: #FFFDD0;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff007f;
         }
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: var(--popcorn-yellow);
-            background-image: radial-gradient(circle at 2px 2px, rgba(225, 33, 32, 0.1) 1px, transparent 0);
-            background-size: 24px 24px;
+            background-color: #121214;
+            color: #f3f4f6;
+            background-image: radial-gradient(circle at 2px 2px, rgba(225, 33, 32, 0.15) 1.5px, transparent 0);
+            background-size: 30px 30px;
             min-height: 100vh;
         }
 
         .brand-font {
             font-family: 'Bangers', cursive;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
+        }
+
+        /* Cinema Stripe Patterns */
+        .cinema-header {
+            background: repeating-linear-gradient(
+                -45deg,
+                var(--popcorn-red),
+                var(--popcorn-red) 20px,
+                #b01514 20px,
+                #b01514 40px
+            );
         }
 
         .ticket-card {
-            background: white;
+            background: #1e1e24;
             position: relative;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.2);
         }
 
         .ticket-card::before, .ticket-card::after {
             content: '';
             position: absolute;
-            left: -15px;
-            width: 30px;
-            height: 30px;
-            background: var(--popcorn-yellow);
+            left: -16px;
+            width: 32px;
+            height: 32px;
+            background: #121214;
             border-radius: 50%;
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
+            border: 2px solid rgba(255, 215, 0, 0.2);
         }
 
-        .ticket-card::after { left: auto; right: -15px; }
+        .ticket-card::after { left: auto; right: -16px; }
 
         .ticket-divider {
-            border-top: 2px dashed #e5e7eb;
+            border-top: 3px dashed rgba(255, 215, 0, 0.2);
             position: relative;
             margin: 2rem 0;
         }
 
         .btn-pop {
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .btn-pop:active { transform: scale(0.95); }
+        .btn-pop:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(225, 33, 32, 0.3);
+        }
 
-        .popcorn-bounce { animation: bounceCustom 2s infinite; }
+        .btn-pop:active { transform: translateY(1px) scale(0.98); }
+
+        .popcorn-bounce { animation: bounceCustom 2.2s infinite ease-in-out; }
         @keyframes bounceCustom {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+
+        .glow-red {
+            box-shadow: 0 0 20px rgba(225, 33, 32, 0.6);
+        }
+
+        .glow-gold {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -74,7 +104,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
             z-index: 100;
             align-items: center;
             justify-content: center;
@@ -83,193 +114,384 @@
         .custom-modal.active { display: flex; }
 
         .counter-animate { transition: all 0.3s ease; }
-        .counter-pop { transform: scale(1.25); color: var(--popcorn-red); font-weight: bold; }
+        .counter-pop { transform: scale(1.35) rotate(-3deg); color: var(--popcorn-yellow); text-shadow: 0 0 10px rgba(255,215,0,0.8); }
 
-        .tab-btn.active {
-            border-bottom: 3px solid var(--popcorn-red);
-            color: var(--popcorn-red);
+        /* Navigation Tab Active Styling */
+        .nav-tab {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-tab.active {
+            background-color: var(--popcorn-red);
+            color: white;
+            box-shadow: 0 0 15px rgba(225, 33, 32, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Dynamic Popcorn Maker animation */
+        .kernel {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #ffeaa7 30%, #fdcb6e 90%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Spin wheel customized */
+        .wheel-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+        }
+        
+        #wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid #ffca28;
+            box-shadow: 0 0 25px rgba(255, 202, 40, 0.5);
+            transition: transform 4s cubic-bezier(0.15, 0.85, 0.35, 1.02);
+            overflow: hidden;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--popcorn-red);
+            z-index: 10;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4">
+<body class="flex flex-col items-center justify-start p-2 md:p-4">
 
-    <!-- Modal Notification -->
+    <!-- Sound FX Control Panel -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2 bg-black/60 p-2 rounded-full border border-yellow-500/30 backdrop-blur-md">
+        <button onclick="toggleAudio()" class="p-2 rounded-full hover:bg-white/10 transition-colors" id="btn-sound" title="Toggle Sound">
+            <i data-lucide="volume-2" class="w-5 h-5 text-yellow-400"></i>
+        </button>
+    </div>
+
+    <!-- Universal Custom Modal -->
     <div id="alert-modal" class="custom-modal">
-        <div class="bg-white p-6 rounded-2xl shadow-2xl max-w-sm w-full text-center">
-            <h4 id="modal-title" class="brand-font text-2xl mb-2 text-red-600">Notice</h4>
-            <p id="modal-message" class="text-gray-600 mb-6 font-medium"></p>
-            <button onclick="closeModal()" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl hover:bg-red-700 transition-colors uppercase tracking-widest">OK</button>
+        <div class="bg-[#1e1e24] border-2 border-yellow-500/50 p-6 rounded-3xl shadow-2xl max-w-sm w-full text-center relative overflow-hidden">
+            <div class="absolute -top-12 -left-12 w-24 h-24 bg-red-600/10 rounded-full blur-xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-24 h-24 bg-yellow-500/10 rounded-full blur-xl"></div>
+            
+            <div class="text-5xl mb-3" id="modal-icon">✨</div>
+            <h4 id="modal-title" class="brand-font text-3xl mb-2 text-yellow-400">Notice</h4>
+            <p id="modal-message" class="text-gray-300 mb-6 font-medium text-sm leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-red-600 to-amber-600 text-white font-bold py-3.5 rounded-2xl hover:brightness-110 transition-all uppercase tracking-widest text-sm shadow-lg shadow-red-600/20">Aright, Awesome!</button>
         </div>
     </div>
 
-    <header class="text-center mb-6 mt-4">
-        <div class="inline-block popcorn-bounce text-6xl mb-2">🍿</div>
-        <h1 class="brand-font text-6xl md:text-7xl text-red-600 drop-shadow-lg">POPMAGIC</h1>
-        <p class="text-red-800 font-bold uppercase text-sm tracking-widest">feeling lucky? and ready for a surprise!</p>
+    <!-- Banner Header -->
+    <header class="text-center mb-6 mt-4 w-full max-w-2xl px-4">
+        <div class="inline-block popcorn-bounce text-7xl mb-1 cursor-pointer" onclick="triggerEasterEggPop()">🍿</div>
+        <h1 class="brand-font text-6xl md:text-7xl text-yellow-400 tracking-wider drop-shadow-[0_4px_10px_rgba(225,33,32,0.6)]">POPMAGIC</h1>
+        <p class="text-red-500 font-black uppercase text-xs tracking-[0.2em] mb-1">Interactive Popcorn Kingdom & Fun Hub</p>
+        <div class="w-24 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent mx-auto mt-2"></div>
     </header>
 
-    <main class="w-full max-w-md">
+    <main class="w-full max-w-lg mb-20">
         
-        <!-- Quick Stats (Calculated with dynamic database offsets) -->
-        <section class="mb-4 grid grid-cols-2 gap-3">
-            <div class="bg-white/90 backdrop-blur p-4 rounded-2xl text-center shadow-sm border border-white">
-                <p class="text-[10px] uppercase font-bold text-gray-400">Tickets Popped</p>
-                <p id="stat-popped" class="text-3xl brand-font text-gray-800 counter-animate">0</p>
+        <!-- Live Counters -->
+        <section class="mb-5 grid grid-cols-2 gap-3 px-1">
+            <div class="bg-[#1e1e24] border border-white/5 p-3 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div class="absolute inset-0 bg-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <p class="text-[9px] uppercase font-bold text-gray-400 tracking-wider">Kernels Popped</p>
+                <p id="stat-popped" class="text-3xl brand-font text-yellow-400 counter-animate">0</p>
             </div>
-            <div class="bg-white/90 backdrop-blur p-4 rounded-2xl text-center shadow-sm border border-white">
-                <p class="text-[10px] uppercase font-bold text-red-400">Total Winners</p>
-                <p id="stat-winners" class="text-3xl brand-font text-red-600 counter-animate">0</p>
+            <div class="bg-[#1e1e24] border border-white/5 p-3 rounded-2xl text-center shadow-lg relative overflow-hidden group">
+                <div class="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <p class="text-[9px] uppercase font-bold text-red-400 tracking-wider">Mega Prizes Claimed</p>
+                <p id="stat-winners" class="text-3xl brand-font text-red-500 counter-animate">0</p>
             </div>
         </section>
 
-        <!-- User View: Entry -->
-        <section id="view-raffle" class="ticket-card p-8 border-t-8 border-red-600">
-            <!-- Premium Self-Contained SVG Banner -->
-            <div class="mb-6 -mx-4 -mt-4 p-1">
-                <div class="relative w-full h-32 rounded-2xl overflow-hidden shadow-md bg-gradient-to-r from-red-600 to-amber-500 flex items-center justify-between p-4 border border-white/20">
-                    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-                    <div class="z-10 flex flex-col justify-center text-left max-w-[60%]">
-                        <span class="bg-yellow-300 text-red-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider w-max mb-1.5 shadow-sm animate-pulse">
-                            EXCLUSIVE PRIZES
-                        </span>
-                        <h4 class="brand-font text-white text-2xl leading-tight drop-shadow-md">POPMAGIC REWARDS</h4>
-                        <p class="text-white/90 text-[10px] font-bold mt-1 leading-snug">Win tickets, cool gifts & surprise treats!</p>
+        <!-- Sub-Nav Tab Console -->
+        <nav class="flex overflow-x-auto gap-2 p-1.5 bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 mb-6 no-scrollbar">
+            <button onclick="switchMainTab('raffle')" id="tab-raffle" class="nav-tab active flex items-center justify-center gap-1.5 px-3 py-2 text-[11px] font-extrabold uppercase rounded-xl text-gray-300 whitespace-nowrap flex-1">
+                <i data-lucide="ticket" class="w-3.5 h-3.5"></i> Promo Claim
+            </button>
+            <button onclick="switchMainTab('arcade')" id="tab-arcade" class="nav-tab flex items-center justify-center gap-1.5 px-3 py-2 text-[11px] font-extrabold uppercase rounded-xl text-gray-300 whitespace-nowrap flex-1">
+                <i data-lucide="gamepad-2" class="w-3.5 h-3.5"></i> Retro Arcade
+            </button>
+            <button onclick="switchMainTab('wheel')" id="tab-wheel" class="nav-tab flex items-center justify-center gap-1.5 px-3 py-2 text-[11px] font-extrabold uppercase rounded-xl text-gray-300 whitespace-nowrap flex-1">
+                <i data-lucide="compass" class="w-3.5 h-3.5"></i> Daily Spin
+            </button>
+            <button onclick="switchMainTab('lab')" id="tab-lab" class="nav-tab flex items-center justify-center gap-1.5 px-3 py-2 text-[11px] font-extrabold uppercase rounded-xl text-gray-300 whitespace-nowrap flex-1">
+                <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i> Flavor Lab
+            </button>
+        </nav>
+
+        <!-- Tab: Raffle Code Claimant (Original functional system redesigned to match high-fidelity theme) -->
+        <div id="section-raffle" class="tab-content">
+            <section id="view-raffle" class="ticket-card p-6 border-t-8 border-red-600 relative">
+                <div class="absolute -top-1 right-4 bg-red-600 text-[9px] text-white font-extrabold px-2.5 py-1 rounded-b-md uppercase tracking-wider">
+                    CLOUD AUTH
+                </div>
+
+                <!-- Custom Header Graphic inside code page -->
+                <div class="mb-6 rounded-2xl overflow-hidden shadow-inner bg-gradient-to-r from-red-700 via-amber-600 to-red-800 p-4 relative border border-white/10">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                    <div class="relative z-10 flex justify-between items-center">
+                        <div class="max-w-[70%] text-left">
+                            <span class="bg-yellow-400 text-black text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow-sm">
+                                CLAIM ONLINE
+                            </span>
+                            <h4 class="brand-font text-white text-3xl leading-tight mt-1">MAGIC RAFFLE TICKET</h4>
+                            <p class="text-white/80 text-[10px] font-semibold">Enter your pack's unique coupon code for premium physical rewards!</p>
+                        </div>
+                        <div class="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 text-3xl">🍿</div>
                     </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div class="text-center">
+                        <h2 class="text-xl font-bold text-white mb-1">Enter Secret Code</h2>
+                        <p class="text-gray-400 text-xs">Examine your packet to discover the unique 6-character code.</p>
+                    </div>
+
+                    <div class="relative">
+                        <input type="text" id="raffleCode" maxlength="10" placeholder="XXXXXX" 
+                            class="w-full text-center text-4xl font-bold p-4 bg-black/50 border-2 border-white/10 rounded-2xl focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/10 outline-none uppercase transition-all tracking-wider text-yellow-400 placeholder-white/10 font-mono">
+                        <div id="error-toast" class="hidden absolute -bottom-5 left-0 right-0 text-center text-red-500 text-xs font-black tracking-widest animate-bounce">
+                            INVALID RAFFLE CODE!
+                        </div>
+                    </div>
+
+                    <button onclick="checkCode()" id="submitBtn" 
+                        class="btn-pop w-full bg-gradient-to-r from-red-600 to-amber-600 text-white brand-font text-3xl py-4 rounded-2xl shadow-lg shadow-red-600/20 uppercase tracking-wider">
+                        POP CODES!
+                    </button>
+                </div>
+
+                <div class="ticket-divider"></div>
+                
+                <div class="flex justify-between items-center text-[10px] text-gray-500 font-extrabold uppercase">
+                    <span>LIVE SERVER DATABASE</span>
+                    <div id="status-wrapper" class="flex items-center gap-1.5">
+                        <span id="conn-status">CONNECTING...</span>
+                        <div id="conn-icon" class="w-2.5 h-2.5 rounded-full bg-yellow-500 shadow-md"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Claim Results (Hidden by default) -->
+            <section id="view-result" class="hidden ticket-card p-8 border-t-8 border-yellow-500 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,215,0,0.05)_0%,transparent_100%)]"></div>
+                <div id="result-icon" class="text-8xl mb-4 animate-bounce"></div>
+                <h3 id="result-title" class="brand-font text-5xl mb-1"></h3>
+                <p id="result-prize" class="text-xl font-bold text-yellow-400 mb-8"></p>
+                
+                <div class="space-y-3 relative z-10 max-w-sm mx-auto">
+                    <a id="claim-prize-btn" href="#" target="_blank" class="hidden btn-pop w-full bg-[#25D366] text-white font-extrabold py-4 rounded-2xl flex items-center justify-center gap-2.5 shadow-lg shadow-green-500/25 uppercase tracking-wider text-sm">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        Claim via WhatsApp
+                    </a>
+                    <button onclick="resetRaffleView()" class="btn-pop w-full bg-white/5 border border-white/10 py-3.5 rounded-2xl font-bold text-gray-300 hover:bg-white/10 transition-colors uppercase text-xs tracking-widest">
+                        Return to Claim Code
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab: Retro Popcorn Arcade -->
+        <div id="section-arcade" class="tab-content hidden">
+            <section class="ticket-card p-4 border-t-8 border-amber-500">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-left">
+                        <h3 class="brand-font text-3xl text-yellow-400 leading-none">KERNEL CATCH</h3>
+                        <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Retro Popcorn Collector</p>
+                    </div>
+                    <div class="bg-black/40 px-3 py-1.5 rounded-xl text-right border border-white/5">
+                        <p class="text-[9px] text-gray-500 uppercase font-black">High Score</p>
+                        <p id="arcade-high" class="font-mono font-black text-amber-400 text-sm">0000</p>
+                    </div>
+                </div>
+
+                <!-- Custom game canvas frame -->
+                <div class="relative rounded-2xl overflow-hidden bg-black border border-white/10 shadow-inner group">
+                    <canvas id="gameCanvas" class="block w-full h-[320px] bg-gradient-to-b from-gray-950 via-gray-900 to-black"></canvas>
                     
-                    <div class="relative z-10 w-24 h-24 flex items-center justify-center">
-                        <svg class="w-full h-full drop-shadow-lg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Popcorn Box -->
-                            <path d="M25 45 L30 85 H50 L55 45 Z" fill="#E12120" stroke="#FFF" stroke-width="2"/>
-                            <path d="M32 45 L35 85" stroke="#FFF" stroke-width="2"/>
-                            <path d="M40 45 L40 85" stroke="#FFF" stroke-width="2"/>
-                            <path d="M48 45 L45 85" stroke="#FFF" stroke-width="2"/>
-                            <!-- Popcorn Fluff -->
-                            <circle cx="28" cy="42" r="7" fill="#FFF2A3" stroke="#FFAE00" stroke-width="1.5"/>
-                            <circle cx="36" cy="38" r="8" fill="#FFF" stroke="#FFAE00" stroke-width="1.5"/>
-                            <circle cx="45" cy="40" r="7" fill="#FFF2A3" stroke="#FFAE00" stroke-width="1.5"/>
-                            <circle cx="52" cy="44" r="6" fill="#FFF" stroke="#FFAE00" stroke-width="1.5"/>
-                            <circle cx="40" cy="46" r="6" fill="#FFF2A3" stroke="#FFAE00" stroke-width="1.5"/>
-                            
-                            <!-- Gift Box -->
-                            <rect x="52" y="55" width="26" height="26" rx="3" fill="#FFD700" stroke="#FFF" stroke-width="1.5"/>
-                            <rect x="50" y="50" width="30" height="6" rx="2" fill="#E12120" stroke="#FFF" stroke-width="1.5"/>
-                            <rect x="62" y="50" width="6" height="31" fill="#FFF"/>
-                            <path d="M60 45 C55 35 65 35 65 50" stroke="#FFF" stroke-width="2" fill="none"/>
-                            <path d="M70 45 C75 35 65 35 65 50" stroke="#FFF" stroke-width="2" fill="none"/>
-                            
-                            <!-- Star effects -->
-                            <path d="M15 25 L18 28 M18 25 L15 28" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M80 20 L83 23 M83 20 L80 23" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
+                    <!-- Game Over / Splash Overlay -->
+                    <div id="arcade-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-center p-6">
+                        <div class="text-6xl mb-3 popcorn-bounce">🍿</div>
+                        <h4 class="brand-font text-4xl text-yellow-400 tracking-wider">READY PLAYER ONE?</h4>
+                        <p class="text-gray-400 text-xs max-w-xs mb-6 font-medium">Catch the fluffy white popcorn in your stripe box. Avoid falling burnt kernels (-1 life) and hot coals!</p>
+                        
+                        <!-- Control layout helper -->
+                        <div class="mb-6 flex gap-3 text-[10px] text-gray-500 uppercase font-bold justify-center bg-white/5 p-2 rounded-xl">
+                            <span>📱 Swipe / Drag Screen</span>
+                            <span>•</span>
+                            <span>💻 Mouse / Arrow Keys</span>
+                        </div>
+
+                        <button onclick="startGame()" class="btn-pop px-8 py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black font-black brand-font text-2xl rounded-2xl shadow-lg shadow-yellow-500/20 uppercase tracking-widest">
+                            PLAY NOW
+                        </button>
+                    </div>
+
+                    <!-- Live Game HUD -->
+                    <div id="game-hud" class="hidden absolute top-3 left-3 right-3 flex justify-between items-center pointer-events-none">
+                        <div class="bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-white/5 text-left">
+                            <span class="text-[9px] text-gray-400 font-bold block uppercase leading-none">Score</span>
+                            <span id="hud-score" class="font-mono text-xl font-bold text-yellow-400">0</span>
+                        </div>
+                        <div class="bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-xl border border-white/5 text-right flex gap-1">
+                            <div id="life-1" class="text-sm">❤️</div>
+                            <div id="life-2" class="text-sm">❤️</div>
+                            <div id="life-3" class="text-sm">❤️</div>
+                        </div>
                     </div>
                 </div>
-                <p class="text-[10px] text-center text-red-700 font-bold uppercase mt-2 tracking-tighter">Enter your coupon code below to instantly claim your reward!</p>
-            </div>
+            </section>
+        </div>
 
-            <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">Lucky Code?</h2>
-            <p class="text-gray-500 text-center text-sm mb-8">Enter the code from your pack to check your prize.</p>
+        <!-- Tab: Daily Fortune Spinner -->
+        <div id="section-wheel" class="tab-content hidden">
+            <section class="ticket-card p-6 border-t-8 border-yellow-500 text-center">
+                <h3 class="brand-font text-4xl text-yellow-400 mb-1 leading-none">SPIN-O-MATIC</h3>
+                <p class="text-xs text-gray-400 max-w-xs mx-auto mb-6 font-medium">Test your luck on our magical Popcorn wheel of fortune. Get random virtual coupon cards & crazy power boosts!</p>
 
-            <div class="space-y-6">
-                <div class="relative">
-                    <input type="text" id="raffleCode" maxlength="10" placeholder="XXXXXX" 
-                        class="w-full text-center text-4xl font-bold p-5 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none uppercase transition-all">
-                    <div id="error-toast" class="hidden absolute -bottom-6 left-0 right-0 text-center text-red-500 text-xs font-bold animate-pulse">
-                        INVALID CODE
+                <!-- Interactive Spinner Canvas -->
+                <div class="wheel-container mb-6">
+                    <div class="wheel-pointer"></div>
+                    <canvas id="wheel" width="280" height="280"></canvas>
+                </div>
+
+                <div class="max-w-xs mx-auto">
+                    <button onclick="spinTheWheel()" id="spin-btn" class="btn-pop w-full bg-gradient-to-r from-yellow-500 to-amber-500 text-black brand-font text-3xl py-4 rounded-2xl shadow-lg shadow-yellow-500/25">
+                        SPIN WHEEL!
+                    </button>
+                    <p class="text-[10px] text-gray-500 mt-2 font-black uppercase tracking-widest">SPINS REMAINING TODAY: <span id="spin-count" class="text-yellow-500">1</span></p>
+                </div>
+
+                <!-- Reward Showcase Area (hidden until spin complete) -->
+                <div id="spin-reward-panel" class="hidden mt-6 bg-black/40 p-4 rounded-2xl border border-white/5 text-center relative overflow-hidden">
+                    <div class="text-4xl mb-1">🎁</div>
+                    <h5 class="text-xs font-bold uppercase text-yellow-400 tracking-wider">YOUR PRIZE VOUCHER</h5>
+                    <p id="spin-reward-text" class="text-lg font-black text-white my-1 font-mono"></p>
+                    <p class="text-[9px] text-gray-400 mt-1 font-medium">Take a screenshot of this card to show off with friends!</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab: Popcorn Flavor Lab (Visual sandbox with Greeting card generator) -->
+        <div id="section-lab" class="tab-content hidden">
+            <section class="ticket-card p-6 border-t-8 border-pink-500">
+                <div class="text-center mb-5">
+                    <h3 class="brand-font text-4xl text-yellow-400 leading-none">POP FLAVOR LAB</h3>
+                    <p class="text-xs text-gray-400">Blend unique seasonings & style customized virtual pop boxes!</p>
+                </div>
+
+                <!-- Crafting Preview Panel -->
+                <div id="lab-preview-box" class="h-44 rounded-2xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center bg-black/40 relative overflow-hidden mb-6 p-4">
+                    <!-- Particle container -->
+                    <div id="lab-particles" class="absolute inset-0 pointer-events-none"></div>
+
+                    <!-- Virtual graphic elements dynamically built -->
+                    <div id="preview-canvas-wrapper" class="relative z-10 text-center flex flex-col items-center justify-center">
+                        <span id="lab-box-icon" class="text-6xl popcorn-bounce mb-2">🍿</span>
+                        <h4 id="lab-box-title" class="brand-font text-2xl text-white tracking-widest uppercase">My Popcorn Box</h4>
+                        <p id="lab-box-desc" class="text-[10px] text-gray-400 italic">No seasoning selected</p>
                     </div>
                 </div>
 
-                <button onclick="checkCode()" id="submitBtn" 
-                    class="btn-pop w-full bg-red-600 hover:bg-red-700 text-white brand-font text-3xl py-5 rounded-2xl shadow-lg shadow-red-200">
-                    CHECK CODE
-                </button>
-            </div>
+                <!-- Seasoning Controls -->
+                <div class="space-y-4 text-left">
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest block mb-2">1. Choose Seasoning Flavor</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setLabSeasoning('sweet', '🍬 Sweet Caramel')" class="seasoning-btn bg-white/5 border border-white/10 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10 text-gray-300">Caramel</button>
+                            <button onclick="setLabSeasoning('spicy', '🌶️ Spicy Cheddar')" class="seasoning-btn bg-white/5 border border-white/10 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10 text-gray-300">Spicy Cheddar</button>
+                            <button onclick="setLabSeasoning('gold', '🧈 Golden Butter')" class="seasoning-btn bg-white/5 border border-white/10 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10 text-gray-300">Extra Butter</button>
+                        </div>
+                    </div>
 
-            <div class="ticket-divider"></div>
-            <div class="flex justify-between items-center text-xs text-gray-400 font-bold uppercase">
-                <span>Real-Time Cloud</span>
-                <div id="status-wrapper" class="flex items-center gap-1">
-                    <i data-lucide="wifi" id="conn-icon" class="w-4 h-4 text-gray-400"></i>
-                    <span id="conn-status">Checking...</span>
+                    <div>
+                        <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest block mb-2">2. Packaging Skin</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setLabSkin('classic', 'Classic Stripes', '#E12120')" class="skin-btn bg-white/5 border border-white/10 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10 text-gray-300">Classic Stripes</button>
+                            <button onclick="setLabSkin('cyber', 'Cyber Neon', '#ff007f')" class="skin-btn bg-white/5 border border-white/10 py-2.5 rounded-xl font-bold text-xs hover:bg-white/10 text-gray-300">Cyber Neon</button>
+                        </div>
+                    </div>
+
+                    <!-- Fire Button -->
+                    <button onclick="triggerPopAction()" class="btn-pop w-full bg-gradient-to-r from-pink-600 to-amber-500 text-white brand-font text-3xl py-4 rounded-2xl shadow-lg shadow-pink-600/20 uppercase tracking-wider mt-2">
+                        🔥 POP THE BOX!
+                    </button>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        <!-- User View: Result -->
-        <section id="view-result" class="hidden ticket-card p-8 border-t-8 border-red-600 text-center">
-            <div id="result-icon" class="text-7xl mb-4"></div>
-            <h3 id="result-title" class="brand-font text-5xl mb-2"></h3>
-            <p id="result-prize" class="text-xl font-bold text-gray-700 mb-8"></p>
-            
-            <div class="space-y-3">
-                <a id="claim-prize-btn" href="#" target="_blank" class="hidden btn-pop w-full bg-[#25D366] text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-green-100 uppercase tracking-widest">
-                    <i data-lucide="message-circle" class="w-6 h-6"></i>
-                    Claim Prize
-                </a>
-                <button onclick="showView('view-raffle')" class="btn-pop w-full bg-gray-100 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-200 uppercase text-xs">
-                    Back to Entry
-                </button>
-            </div>
-        </section>
-
-        <!-- Admin Login -->
+        <!-- Admin Entry (Keeps the original Functional Core secure and robust) -->
         <section id="view-admin-login" class="hidden ticket-card p-8 border-t-8 border-gray-800">
             <div class="text-center mb-6">
-                <i data-lucide="shield-lock" class="w-12 h-12 mx-auto text-gray-400 mb-2"></i>
-                <h2 class="brand-font text-3xl">Staff Entry</h2>
+                <i data-lucide="shield-lock" class="w-12 h-12 mx-auto text-yellow-500 mb-2"></i>
+                <h2 class="brand-font text-3xl text-white">Staff Dashboard Login</h2>
+                <p class="text-xs text-gray-400 mt-1">Authenticate to manage physical prize coupons and live offsets.</p>
             </div>
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="Admin Password (default: admin)" 
-                    class="w-full p-4 border rounded-xl text-center outline-none focus:border-red-500">
-                <button onclick="handleAdminLogin()" class="w-full bg-gray-800 text-white font-bold py-4 rounded-xl uppercase tracking-wider text-sm">
+                <input type="password" id="adminPass" placeholder="Staff Password (default: admin)" 
+                    class="w-full p-4 bg-black/60 border border-white/10 rounded-xl text-center outline-none focus:border-red-500 font-mono text-yellow-400 placeholder-white/20">
+                <button onclick="handleAdminLogin()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold py-4 rounded-xl uppercase tracking-wider text-sm transition-colors">
                     LOGIN
                 </button>
-                <button onclick="showView('view-raffle')" class="w-full text-gray-400 text-sm py-2">Cancel</button>
+                <button onclick="showView('view-raffle')" class="w-full text-gray-400 text-xs py-2 uppercase tracking-widest font-black">Cancel</button>
             </div>
         </section>
 
-        <!-- Admin Dashboard -->
-        <section id="view-admin-dashboard" class="hidden ticket-card p-0 border-t-8 border-green-600">
-            <div class="flex justify-between items-center p-6 bg-gray-50 border-b">
-                <h2 class="brand-font text-3xl">Staff Control</h2>
-                <button onclick="showView('view-raffle')" class="text-red-500 text-xl font-bold p-2">&times;</button>
+        <!-- Admin Control Room -->
+        <section id="view-admin-dashboard" class="hidden ticket-card p-0 border-t-8 border-yellow-500">
+            <div class="flex justify-between items-center p-5 bg-black/40 border-b border-white/5">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="lock" class="w-5 h-5 text-yellow-500"></i>
+                    <h2 class="brand-font text-3xl text-yellow-400 leading-none">STAFF ROOM</h2>
+                </div>
+                <button onclick="showView('view-raffle')" class="text-red-500 text-2xl font-bold p-1 hover:text-red-400 transition-colors">&times;</button>
             </div>
 
-            <div class="p-6">
+            <div class="p-5 space-y-6">
                 <!-- Creator Panel Card -->
-                <div class="bg-gray-100/50 p-4 rounded-xl mb-6 border-2 border-dashed border-gray-200">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-3 flex items-center gap-2">
-                        <i data-lucide="plus-circle" class="w-3 h-3"></i> Coupon Code Creator
+                <div class="bg-black/30 p-4 rounded-2xl border border-white/5">
+                    <h3 class="text-xs font-bold text-yellow-400 uppercase mb-3.5 flex items-center gap-2">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Coupon Code Creator
                     </h3>
                     
                     <!-- Segmented Mode Switcher -->
-                    <div class="grid grid-cols-2 gap-1 bg-gray-200 p-1 rounded-lg mb-4 text-xs font-bold">
-                        <button onclick="setCreatorMode('auto')" id="mode-btn-auto" class="py-1.5 rounded-md text-center transition-all bg-white text-gray-800 shadow-sm">
+                    <div class="grid grid-cols-2 gap-1 bg-black/40 p-1 rounded-lg mb-4 text-xs font-bold border border-white/5">
+                        <button onclick="setCreatorMode('auto')" id="mode-btn-auto" class="py-2 rounded-md text-center transition-all bg-yellow-500 text-black shadow-sm">
                             Auto-Generate
                         </button>
-                        <button onclick="setCreatorMode('custom')" id="mode-btn-custom" class="py-1.5 rounded-md text-center transition-all text-gray-500 hover:text-gray-800">
+                        <button onclick="setCreatorMode('custom')" id="mode-btn-custom" class="py-2 rounded-md text-center transition-all text-gray-400 hover:text-white">
                             Custom Code
                         </button>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2 mb-3">
-                        <!-- Left Side Config (Changes based on selected mode) -->
                         <div class="space-y-1">
-                            <!-- Input Box for Auto mode quantity -->
                             <div id="creator-qty-wrapper">
-                                <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Quantity</label>
-                                <input type="number" id="genQty" value="5" min="1" max="50" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                                <label class="text-[9px] text-gray-400 font-black uppercase ml-1">Quantity</label>
+                                <input type="number" id="genQty" value="5" min="1" max="50" class="w-full p-2.5 bg-black border border-white/10 rounded-lg text-xs outline-none focus:ring-2 focus:ring-yellow-500 text-white">
                             </div>
-                            <!-- Input Box for Custom mode entry -->
                             <div id="creator-code-wrapper" class="hidden">
-                                <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Your Code</label>
-                                <input type="text" id="genCustomVal" placeholder="GOLDEN99" maxlength="12" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400 uppercase font-mono font-bold">
+                                <label class="text-[9px] text-gray-400 font-black uppercase ml-1">Your Code</label>
+                                <input type="text" id="genCustomVal" placeholder="GOLDEN99" maxlength="12" class="w-full p-2.5 bg-black border border-white/10 rounded-lg text-xs outline-none focus:ring-2 focus:ring-yellow-500 uppercase font-mono font-bold text-yellow-400">
                             </div>
                         </div>
 
-                        <!-- Right Side Config (Winner/Non Winner selection) -->
                         <div class="space-y-1">
-                            <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Type</label>
-                            <select id="genWinner" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                            <label class="text-[9px] text-gray-400 font-black uppercase ml-1">Type</label>
+                            <select id="genWinner" class="w-full p-2.5 bg-black border border-white/10 rounded-lg text-xs outline-none focus:ring-2 focus:ring-yellow-500 text-white">
                                 <option value="true">Winner 🏆</option>
                                 <option value="false">Non-Winner 🍿</option>
                             </select>
@@ -277,96 +499,95 @@
                     </div>
 
                     <div class="space-y-1 mb-4">
-                        <label class="text-[10px] text-gray-400 font-bold uppercase ml-1">Prize Description</label>
-                        <input type="text" id="genPrize" placeholder="e.g. 1 Free Soda Pack" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-green-400">
+                        <label class="text-[9px] text-gray-400 font-black uppercase ml-1">Prize Description</label>
+                        <input type="text" id="genPrize" placeholder="e.g. 1 Free Big Box Popcorn" class="w-full p-2.5 bg-black border border-white/10 rounded-lg text-xs outline-none focus:ring-2 focus:ring-yellow-500 text-white">
                     </div>
 
-                    <button onclick="generateCodes()" id="genBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-md transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                    <button onclick="generateCodes()" id="genBtn" class="btn-pop w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs">
                         <i data-lucide="wand-2" class="w-4 h-4"></i>
-                        <span id="genBtnText">CREATE NEW BATCH</span>
+                        <span id="genBtnText" class="uppercase tracking-widest font-black">CREATE NEW BATCH</span>
                     </button>
                 </div>
 
-                <!-- NEW: Display Counter Customizer (Dynamic Boost Modifier) -->
-                <div class="bg-gray-100/50 p-4 rounded-xl mb-6 border-2 border-dashed border-gray-200">
-                    <h3 class="text-xs font-bold text-gray-500 uppercase mb-3 flex items-center gap-2">
-                        <i data-lucide="sliders" class="w-3.5 h-3.5 text-blue-500"></i> Live Display Counter Boosts
+                <!-- Display Counter Customizer (Dynamic Boost Modifier) -->
+                <div class="bg-black/30 p-4 rounded-2xl border border-white/5">
+                    <h3 class="text-xs font-bold text-red-400 uppercase mb-3 flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Display Counter Boosts
                     </h3>
-                    <p class="text-[10px] text-gray-400 font-semibold mb-3">Add / subtract manual boosts to the live display counters shown to users:</p>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
-                            <label class="text-[10px] text-gray-400 font-extrabold uppercase block mb-2">Popped Boost</label>
+                        <div class="bg-black/40 p-3 rounded-xl border border-white/5 text-center">
+                            <label class="text-[9px] text-gray-400 font-bold uppercase block mb-2">Popped Boost</label>
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="adjustCounterOffset('popped', -5)" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">-5</button>
-                                <input type="number" id="offsetPoppedVal" value="0" class="w-12 text-center font-bold text-sm bg-gray-50 p-1 border rounded-md focus:border-red-500 outline-none" onchange="saveCounterOffsets()">
-                                <button onclick="adjustCounterOffset('popped', 5)" class="bg-green-50 hover:bg-green-100 text-green-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">+5</button>
+                                <button onclick="adjustCounterOffset('popped', -5)" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black w-8 h-8 rounded-lg text-xs transition-colors">-5</button>
+                                <input type="number" id="offsetPoppedVal" value="0" class="w-12 text-center font-bold text-sm bg-black p-1 border border-white/10 rounded-md focus:border-yellow-500 outline-none text-yellow-400" onchange="saveCounterOffsets()">
+                                <button onclick="adjustCounterOffset('popped', 5)" class="bg-green-500/10 hover:bg-green-500/20 text-green-500 font-black w-8 h-8 rounded-lg text-xs transition-colors">+5</button>
                             </div>
                         </div>
-                        <div class="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-center">
-                            <label class="text-[10px] text-gray-400 font-extrabold uppercase block mb-2">Winners Boost</label>
+                        <div class="bg-black/40 p-3 rounded-xl border border-white/5 text-center">
+                            <label class="text-[9px] text-gray-400 font-bold uppercase block mb-2">Winners Boost</label>
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="adjustCounterOffset('winners', -1)" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">-1</button>
-                                <input type="number" id="offsetWinnersVal" value="0" class="w-12 text-center font-bold text-sm bg-gray-50 p-1 border rounded-md focus:border-red-500 outline-none" onchange="saveCounterOffsets()">
-                                <button onclick="adjustCounterOffset('winners', 1)" class="bg-green-50 hover:bg-green-100 text-green-600 font-bold w-8 h-8 rounded-lg text-xs transition-colors">+1</button>
+                                <button onclick="adjustCounterOffset('winners', -1)" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black w-8 h-8 rounded-lg text-xs transition-colors">-1</button>
+                                <input type="number" id="offsetWinnersVal" value="0" class="w-12 text-center font-bold text-sm bg-black p-1 border border-white/10 rounded-md focus:border-yellow-500 outline-none text-yellow-400" onchange="saveCounterOffsets()">
+                                <button onclick="adjustCounterOffset('winners', 1)" class="bg-green-500/10 hover:bg-green-500/20 text-green-500 font-black w-8 h-8 rounded-lg text-xs transition-colors">+1</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Admin Status Counters -->
-                <div class="grid grid-cols-2 gap-3 mb-6">
-                    <div class="bg-green-50 p-3 rounded-xl border border-green-100 text-center">
-                        <p class="text-[9px] uppercase font-bold text-green-600">Active Codes</p>
-                        <p id="admin-stat-active" class="text-xl font-bold text-green-700">0</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-green-500/10 p-3 rounded-xl border border-green-500/20 text-center">
+                        <p class="text-[9px] uppercase font-bold text-green-400">Active Codes</p>
+                        <p id="admin-stat-active" class="text-xl font-bold text-green-500">0</p>
                     </div>
-                    <div class="bg-red-50 p-3 rounded-xl border border-red-100 text-center">
-                        <p class="text-[9px] uppercase font-bold text-red-600">Used Codes</p>
-                        <p id="admin-stat-used" class="text-xl font-bold text-red-700">0</p>
+                    <div class="bg-red-500/10 p-3 rounded-xl border border-red-500/20 text-center">
+                        <p class="text-[9px] uppercase font-bold text-red-400">Used Codes</p>
+                        <p id="admin-stat-used" class="text-xl font-bold text-red-500">0</p>
                     </div>
                 </div>
 
                 <!-- Tabs -->
-                <div class="flex border-b mb-4">
-                    <button onclick="switchAdminTab('new')" id="tab-new" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400 active">Recently Made</button>
-                    <button onclick="switchAdminTab('active')" id="tab-active" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400">Active</button>
-                    <button onclick="switchAdminTab('used')" id="tab-used" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-tighter text-gray-400">Used History</button>
+                <div class="flex border-b border-white/10 text-center">
+                    <button onclick="switchAdminTab('new')" id="tab-new" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-wider text-gray-400 active border-b-2 border-transparent">Recently Made</button>
+                    <button onclick="switchAdminTab('active')" id="tab-active" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-wider text-gray-400 border-b-2 border-transparent">Active</button>
+                    <button onclick="switchAdminTab('used')" id="tab-used" class="tab-btn flex-1 py-2 text-xs font-bold uppercase tracking-wider text-gray-400 border-b-2 border-transparent">Used History</button>
                 </div>
 
                 <!-- Table Content -->
-                <div class="max-h-[350px] overflow-y-auto no-scrollbar min-h-[150px]">
+                <div class="max-h-[300px] overflow-y-auto no-scrollbar min-h-[150px] bg-black/20 rounded-xl p-2 border border-white/5">
                     <table class="w-full text-left text-[11px]">
-                        <thead class="sticky top-0 bg-white shadow-sm">
-                            <tr class="text-gray-400 uppercase">
+                        <thead class="sticky top-0 bg-[#1e1e24] shadow-sm">
+                            <tr class="text-gray-400 uppercase border-b border-white/5">
                                 <th class="py-2 px-1">Code</th>
                                 <th class="py-2 px-1 text-center">Type</th>
                                 <th class="py-2 px-1">Prize Info</th>
                                 <th class="py-2 px-1 text-right">State</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-table-body" class="divide-y divide-gray-50">
+                        <tbody id="admin-table-body" class="divide-y divide-white/5 text-gray-300">
                             <!-- Injected rows -->
                         </tbody>
                     </table>
-                    <div id="admin-empty-state" class="hidden text-center py-10 text-gray-300">
+                    <div id="admin-empty-state" class="hidden text-center py-10 text-gray-500">
                         <i data-lucide="database" class="w-10 h-10 mx-auto mb-2 opacity-20"></i>
-                        <p class="text-xs uppercase font-bold tracking-widest">No codes found in this category</p>
+                        <p class="text-[10px] uppercase font-bold tracking-widest">No codes found</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Footer Actions -->
-        <div class="mt-8 text-center space-y-4">
-            <button onclick="showView('view-admin-login')" class="text-xs font-bold text-red-800/40 uppercase tracking-widest hover:text-red-800 transition-colors">
-                Staff Access
+        <!-- FOOTER & BRAND ACCESS LINKS -->
+        <footer class="mt-8 text-center space-y-4">
+            <button onclick="showView('view-admin-login')" class="text-xs font-black text-white/20 uppercase tracking-[0.2em] hover:text-yellow-500 transition-colors block mx-auto">
+                🔒 STAFF ENTRY
             </button>
-            <div>
-                <a href="https://wa.me/2347059806944" target="_blank" class="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-3 rounded-full font-bold text-sm shadow-md hover:scale-105 transition-transform">
-                    <i data-lucide="life-buoy" class="w-4 h-4"></i>
-                    Need Help? Support
+            <div class="pt-2">
+                <a href="https://wa.me/2347059806944" target="_blank" class="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-md hover:scale-105 transition-transform uppercase tracking-wider">
+                    <i data-lucide="life-buoy" class="w-3.5 h-3.5"></i>
+                    SUPPORT HELP desk
                 </a>
             </div>
-        </div>
+        </footer>
     </main>
 
     <script type="module">
@@ -374,7 +595,7 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, query, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // CONFIG (Reads environmental __firebase_config dynamically with fallback)
+        // CONFIG
         const firebaseConfig = typeof __firebase_config !== 'undefined' && __firebase_config
             ? JSON.parse(__firebase_config)
             : {
@@ -388,9 +609,7 @@
             };
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'popcorn-magic-v1';
-        
-        // Passwords & configs
-        const ADMIN_PASSWORD = "admin"; // default fallback is now 'admin'
+        const ADMIN_PASSWORD = "admin";
         const WHATSAPP_NUMBER = "2347059806944";
 
         const app = initializeApp(firebaseConfig);
@@ -404,20 +623,99 @@
         let unsubscribeStats = null;
         let unsubscribeSettings = null;
         let activeAdminTab = 'new';
-        let currentBatchCodes = []; // Memory of just generated codes in this session
-        let allCodesData = []; // Local mirror of all codes for fast switching
-        let creatorMode = 'auto'; // 'auto' or 'custom'
+        let currentBatchCodes = [];
+        let allCodesData = [];
+        let creatorMode = 'auto';
 
-        // Display offsets (Boosts) variables
+        // State Offsets
         let realPoppedCount = 0;
         let realWinnersCount = 0;
         let poppedOffset = 0;
         let winnersOffset = 0;
 
+        // Sound System Config
+        let audioContext = null;
+        let isMuted = false;
+
         const getCodesCollection = () => collection(db, 'artifacts', appId, 'public', 'data', 'raffle_codes');
         const getSettingsDocRef = () => doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'counters');
 
-        // Robust authenticating with Custom Token priority
+        // Custom Audio synthesizer utilizing pure Web Audio API
+        function playSynthesizedSound(type) {
+            if (isMuted) return;
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                const now = audioContext.currentTime;
+
+                if (type === 'pop') {
+                    // Crisp popcorn popping sound
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+                    
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.09);
+                } else if (type === 'spin_tick') {
+                    // Wood click indicator sound
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'win') {
+                    // Winning major reward chime
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(554.37, now + 0.1);
+                    osc.frequency.setValueAtTime(659.25, now + 0.2);
+                    osc.frequency.setValueAtTime(880, now + 0.3);
+
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                    osc.start(now);
+                    osc.stop(now + 0.65);
+                } else if (type === 'lose') {
+                    // Try again low note
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(90, now + 0.35);
+
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.45);
+                }
+            } catch (err) {
+                console.warn("Audio failure:", err);
+            }
+        }
+
+        window.toggleAudio = () => {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btn-sound');
+            if (isMuted) {
+                btn.innerHTML = `<i data-lucide="volume-x" class="w-5 h-5 text-gray-500"></i>`;
+            } else {
+                btn.innerHTML = `<i data-lucide="volume-2" class="w-5 h-5 text-yellow-400"></i>`;
+                playSynthesizedSound('pop');
+            }
+            lucide.createIcons();
+        };
+
         async function initAuth() {
             updateStatus(false, "Connecting...");
             try {
@@ -457,30 +755,18 @@
                 statusEl.innerText = text || (isConnected ? "Connected" : "Disconnected");
             }
             if (iconEl) {
-                iconEl.classList.remove('text-gray-400', 'text-green-500', 'text-red-500', 'text-amber-500');
-                if (isConnected) {
-                    iconEl.classList.add('text-green-500');
-                } else if (text === "Connecting...") {
-                    iconEl.classList.add('text-amber-500');
-                } else {
-                    iconEl.classList.add('text-red-500');
-                }
+                iconEl.className = `w-2.5 h-2.5 rounded-full shadow-md transition-all duration-300 ${isConnected ? 'bg-green-500 shadow-green-500/50' : 'bg-red-500 shadow-red-500/50'}`;
             }
-            lucide.createIcons();
         }
 
-        // Kickoff system authentications on load
         initAuth();
 
-        // Combined Display Counters Listener (Real codes + Custom offsets settings)
         function startStatsListener() {
             if (!currentUser) return;
             
-            // 1. Unsubscribe old streams
             if (unsubscribeStats) unsubscribeStats();
             if (unsubscribeSettings) unsubscribeSettings();
 
-            // 2. Local helper to calculate combined totals and bounce UI
             function updateFinalDisplayUI() {
                 const finalPopped = Math.max(0, realPoppedCount + poppedOffset);
                 const finalWinners = Math.max(0, realWinnersCount + winnersOffset);
@@ -488,14 +774,12 @@
                 updateStatUI('stat-winners', finalWinners);
             }
 
-            // 3. Listen to display offsets (Boost values) in cloud
             unsubscribeSettings = onSnapshot(getSettingsDocRef(), (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     poppedOffset = parseInt(data.poppedOffset) || 0;
                     winnersOffset = parseInt(data.winnersOffset) || 0;
 
-                    // Sync counter values into Admin controls if they exist on current page view
                     const popInput = document.getElementById('offsetPoppedVal');
                     const winInput = document.getElementById('offsetWinnersVal');
                     if (popInput) popInput.value = poppedOffset;
@@ -509,7 +793,6 @@
                 console.warn("Could not load setting offsets, defaulting to zero:", err);
             });
 
-            // 4. Listen to real raffle status
             const codesQuery = query(getCodesCollection());
             unsubscribeStats = onSnapshot(codesQuery, (snapshot) => {
                 realPoppedCount = 0; 
@@ -536,114 +819,474 @@
             }
         }
 
-        // ADMIN-SIDE OFFSET CONTROLLERS
-        window.adjustCounterOffset = async (type, change) => {
-            if (!currentUser) return;
-            const popInput = document.getElementById('offsetPoppedVal');
-            const winInput = document.getElementById('offsetWinnersVal');
+        // NAVIGATION SWITCHERS
+        window.switchMainTab = (tabName) => {
+            playSynthesizedSound('spin_tick');
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            const targetSection = document.getElementById(`section-${tabName}`);
             
-            let currentPopped = parseInt(popInput.value) || 0;
-            let currentWinners = parseInt(winInput.value) || 0;
-            
-            if (type === 'popped') {
-                currentPopped += change;
-                popInput.value = currentPopped;
-            } else if (type === 'winners') {
-                currentWinners += change;
-                winInput.value = currentWinners;
+            if (targetTab) targetTab.classList.add('active');
+            if (targetSection) targetSection.classList.remove('hidden');
+
+            // Specific module initializations
+            if (tabName === 'arcade') {
+                initArcadeGame();
+            } else if (tabName === 'wheel') {
+                drawWheel();
             }
-            
-            await writeOffsetsToFirebase(currentPopped, currentWinners);
         };
 
-        window.saveCounterOffsets = async () => {
-            const popInput = document.getElementById('offsetPoppedVal');
-            const winInput = document.getElementById('offsetWinnersVal');
-            
-            let currentPopped = parseInt(popInput.value) || 0;
-            let currentWinners = parseInt(winInput.value) || 0;
-            
-            await writeOffsetsToFirebase(currentPopped, currentWinners);
-        };
-
-        async function writeOffsetsToFirebase(pOffset, wOffset) {
-            try {
-                await setDoc(getSettingsDocRef(), {
-                    poppedOffset: parseInt(pOffset) || 0,
-                    winnersOffset: parseInt(wOffset) || 0
-                }, { merge: true });
-            } catch (err) {
-                console.error("Failed writing boosts to database:", err);
-            }
-        }
-
-        // NAVIGATION & UI SWITCHES
         window.showView = (viewId) => {
             ['view-raffle', 'view-result', 'view-admin-login', 'view-admin-dashboard'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
             });
             document.getElementById(viewId).classList.remove('hidden');
-            lucide.createIcons();
+            if (viewId === 'view-raffle') {
+                switchMainTab('raffle');
+            }
             if (viewId !== 'view-admin-dashboard' && unsubscribeCodes) {
                 unsubscribeCodes(); unsubscribeCodes = null;
             }
         };
 
-        window.switchAdminTab = (tab) => {
-            activeAdminTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            renderAdminTable();
+        // RETRO CANVAS ARCADE GAME ENGINE
+        let canvas, ctx;
+        let gameLoopId = null;
+        let bucket = { x: 0, w: 70, h: 45, speed: 12 };
+        let items = [];
+        let score = 0;
+        let lives = 3;
+        let gamePlaying = false;
+        let leftPressed = false;
+        let rightPressed = false;
+        let highscore = localStorage.getItem('pop_high_score') || 0;
+
+        function initArcadeGame() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Handle responsive size
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            document.getElementById('arcade-high').innerText = String(highscore).padStart(4, '0');
+
+            // Controls setup
+            setupControls();
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            bucket.x = canvas.width / 2 - bucket.w / 2;
+        }
+
+        function setupControls() {
+            // Unbind to prevent duplicates
+            window.onkeydown = null; window.onkeyup = null;
+            
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') leftPressed = true;
+                if (e.key === 'ArrowRight') rightPressed = true;
+            });
+            window.addEventListener('keyup', (e) => {
+                if (e.key === 'ArrowLeft') leftPressed = false;
+                if (e.key === 'ArrowRight') rightPressed = false;
+            });
+
+            // Touch & Drag Controls
+            let touchStartX = 0;
+            canvas.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (!gamePlaying) return;
+                const rect = canvas.getBoundingClientRect();
+                const touchX = e.touches[0].clientX - rect.left;
+                bucket.x = Math.max(0, Math.min(canvas.width - bucket.w, touchX - bucket.w / 2));
+            }, { passive: true });
+
+            // Mouse controls
+            canvas.addEventListener('mousemove', (e) => {
+                if (!gamePlaying) return;
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                bucket.x = Math.max(0, Math.min(canvas.width - bucket.w, mouseX - bucket.w / 2));
+            });
+        }
+
+        window.startGame = () => {
+            playSynthesizedSound('pop');
+            document.getElementById('arcade-overlay').classList.add('hidden');
+            document.getElementById('game-hud').classList.remove('hidden');
+            
+            score = 0;
+            lives = 3;
+            items = [];
+            gamePlaying = true;
+            
+            updateLivesUI();
+            document.getElementById('hud-score').innerText = score;
+
+            if (gameLoopId) cancelAnimationFrame(gameLoopId);
+            gameLoop();
         };
 
-        // ADMIN CREATOR SWITCHING MODE (Auto or Custom)
-        window.setCreatorMode = (mode) => {
-            creatorMode = mode;
-            
-            const btnAuto = document.getElementById('mode-btn-auto');
-            const btnCustom = document.getElementById('mode-btn-custom');
-            
-            const qtyWrapper = document.getElementById('creator-qty-wrapper');
-            const codeWrapper = document.getElementById('creator-code-wrapper');
-            
-            const btnText = document.getElementById('genBtnText');
-
-            if (mode === 'auto') {
-                btnAuto.className = "py-1.5 rounded-md text-center transition-all bg-white text-gray-800 shadow-sm";
-                btnCustom.className = "py-1.5 rounded-md text-center transition-all text-gray-500 hover:text-gray-800";
-                
-                qtyWrapper.classList.remove('hidden');
-                codeWrapper.classList.add('hidden');
-                btnText.innerText = "CREATE NEW BATCH";
-            } else {
-                btnCustom.className = "py-1.5 rounded-md text-center transition-all bg-white text-gray-800 shadow-sm";
-                btnAuto.className = "py-1.5 rounded-md text-center transition-all text-gray-500 hover:text-gray-800";
-                
-                qtyWrapper.classList.add('hidden');
-                codeWrapper.classList.remove('hidden');
-                btnText.innerText = "SAVE CUSTOM CODE";
+        function updateLivesUI() {
+            for (let i = 1; i <= 3; i++) {
+                const lifeEl = document.getElementById(`life-${i}`);
+                if (lifeEl) {
+                    lifeEl.style.opacity = i <= lives ? "1" : "0.15";
+                }
             }
+        }
+
+        function gameLoop() {
+            if (!gamePlaying) return;
+
+            // Clear Frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Background grid details
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 30) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+            }
+
+            // Move Bucket
+            if (leftPressed) bucket.x = Math.max(0, bucket.x - bucket.speed);
+            if (rightPressed) bucket.x = Math.min(canvas.width - bucket.w, bucket.x + bucket.speed);
+
+            // Draw Bucket (Cute Retro Red/White Stripes Popcorn Bag)
+            const stripeW = bucket.w / 5;
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = i % 2 === 0 ? '#E12120' : '#FFFFFF';
+                ctx.fillRect(bucket.x + (i * stripeW), canvas.height - bucket.h, stripeW, bucket.h);
+            }
+            // Rim border
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(bucket.x - 2, canvas.height - bucket.h - 4, bucket.w + 4, 6);
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 9px Quicksand';
+            ctx.fillText("POP", bucket.x + (bucket.w / 2) - 8, canvas.height - bucket.h / 2 + 4);
+
+            // Spawn Items
+            if (Math.random() < 0.028) {
+                const isBurnt = Math.random() < 0.22;
+                items.push({
+                    x: Math.random() * (canvas.width - 20) + 10,
+                    y: -10,
+                    size: isBurnt ? 12 : 14,
+                    speed: Math.random() * 3 + 2.5 + (score * 0.05),
+                    burnt: isBurnt
+                });
+            }
+
+            // Draw and Update Items
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                item.y += item.speed;
+
+                // Draw Kernel/Fluff
+                ctx.beginPath();
+                if (item.burnt) {
+                    // Burnt flake (Dark brown)
+                    ctx.fillStyle = '#4a2c11';
+                    ctx.arc(item.x, item.y, item.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.font = '8px Bangers';
+                    ctx.fillStyle = '#FF0000';
+                    ctx.fillText("🔥", item.x - 4, item.y - 6);
+                } else {
+                    // Fluffy white golden kernel
+                    ctx.fillStyle = '#FFFDD0';
+                    ctx.arc(item.x, item.y, item.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#FFD700';
+                    ctx.arc(item.x - 2, item.y - 2, item.size / 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Catch/Collision detection
+                if (item.y + item.size / 2 >= canvas.height - bucket.h &&
+                    item.x >= bucket.x && item.x <= bucket.x + bucket.w) {
+                    // Item caught!
+                    items.splice(i, 1);
+                    if (item.burnt) {
+                        playSynthesizedSound('lose');
+                        lives--;
+                        updateLivesUI();
+                        if (lives <= 0) gameOver();
+                    } else {
+                        playSynthesizedSound('pop');
+                        score += 10;
+                        document.getElementById('hud-score').innerText = score;
+                    }
+                    continue;
+                }
+
+                // Fall off screen detection
+                if (item.y - item.size > canvas.height) {
+                    items.splice(i, 1);
+                    if (!item.burnt) {
+                        // Let a fresh flake go? Loose a life
+                        lives--;
+                        updateLivesUI();
+                        playSynthesizedSound('lose');
+                        if (lives <= 0) gameOver();
+                    }
+                }
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            gamePlaying = false;
+            cancelAnimationFrame(gameLoopId);
+            playSynthesizedSound('lose');
+
+            // Save highscore
+            if (score > highscore) {
+                highscore = score;
+                localStorage.setItem('pop_high_score', highscore);
+                document.getElementById('arcade-high').innerText = String(highscore).padStart(4, '0');
+                confetti({ particleCount: 80, spread: 60 });
+            }
+
+            // Update overlay state
+            const overlay = document.getElementById('arcade-overlay');
+            overlay.innerHTML = `
+                <h4 class="brand-font text-5xl text-red-500 tracking-wider">GAME OVER</h4>
+                <p class="text-white text-lg font-bold mb-1">You Scored: <span class="text-yellow-400 font-mono">${score}</span></p>
+                <p class="text-gray-400 text-xs mb-6 font-semibold">Keep training your popcorn-catching reflex!</p>
+                <button onclick="startGame()" class="btn-pop px-8 py-3.5 bg-yellow-500 hover:bg-yellow-400 text-black font-black brand-font text-2xl rounded-2xl shadow-lg uppercase tracking-widest">
+                    TRY AGAIN
+                </button>
+            `;
+            overlay.classList.remove('hidden');
+        }
+
+
+        // LUCKY SPIN-O-MATIC FORTUNE WHEEL SYSTEM
+        const wheelSectors = [
+            { label: "🏆 Mega Pop Pack", color: "#E12120", textColor: "#FFF", winner: true, prize: "🏆 1 Mega Popcorn Combo Pack!" },
+            { label: "🍿 Butter Boost", color: "#1e1e24", textColor: "#FFD700", winner: false, prize: "⚡ Butter Score Boost Active!" },
+            { label: "🍿 Burnt Flake!", color: "#4a2c11", textColor: "#FFF", winner: false, prize: "🍿 Burnt Flake Badge Unlocked" },
+            { label: "🏆 Movie Ticket", color: "#FFD700", textColor: "#000", winner: true, prize: "🎫 Cinema Movie Night Pass" },
+            { label: "🍿 Spicy Caramel", color: "#ff007f", textColor: "#FFF", winner: false, prize: "🌶️ Virtual Spicy Caramel Box" },
+            { label: "🍿 Golden Kernel", color: "#00f3ff", textColor: "#000", winner: false, prize: "✨ Golden Kernel Achievement" }
+        ];
+
+        let wheelRotation = 0;
+        let isSpinning = false;
+
+        function drawWheel() {
+            const wheelCanvas = document.getElementById('wheel');
+            if (!wheelCanvas) return;
+            const wCtx = wheelCanvas.getContext('2d');
+            const center = wheelCanvas.width / 2;
+            const radius = center - 10;
+            const anglePerSector = (Math.PI * 2) / wheelSectors.length;
+
+            wCtx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
+
+            wheelSectors.forEach((sector, index) => {
+                const startAngle = index * anglePerSector;
+                const endAngle = startAngle + anglePerSector;
+
+                // Wedge slice
+                wCtx.beginPath();
+                wCtx.moveTo(center, center);
+                wCtx.arc(center, center, radius, startAngle, endAngle);
+                wCtx.fillStyle = sector.color;
+                wCtx.fill();
+                wCtx.lineWidth = 2;
+                wCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                wCtx.stroke();
+
+                // Sector text labeling
+                wCtx.save();
+                wCtx.translate(center, center);
+                wCtx.rotate(startAngle + anglePerSector / 2);
+                wCtx.textAlign = "right";
+                wCtx.fillStyle = sector.textColor;
+                wCtx.font = "bold 10px Quicksand";
+                wCtx.fillText(sector.label, radius - 15, 4);
+                wCtx.restore();
+            });
+
+            // Draw center node cap
+            wCtx.beginPath();
+            wCtx.arc(center, center, 18, 0, Math.PI * 2);
+            wCtx.fillStyle = "#FFD700";
+            wCtx.fill();
+            wCtx.strokeStyle = "#FFFFFF";
+            wCtx.lineWidth = 3;
+            wCtx.stroke();
+        }
+
+        window.spinTheWheel = () => {
+            if (isSpinning) return;
+            
+            const spinBtn = document.getElementById('spin-btn');
+            const countEl = document.getElementById('spin-count');
+
+            if (countEl.innerText === "0") {
+                window.showAlert("Out of Spins", "Each pop explorer gets 1 daily lucky spin! Come back tomorrow for another go.");
+                return;
+            }
+
+            isSpinning = true;
+            spinBtn.disabled = true;
+            spinBtn.innerText = "SPINNING...";
+
+            // Random rotation sector calculation
+            const randomDegrees = Math.floor(Math.random() * 360) + 1440; // minimum 4 complete spins
+            const wheelEl = document.getElementById('wheel');
+            
+            wheelEl.style.transform = `rotate(${randomDegrees}deg)`;
+
+            // Sound ticker ticks during rotation
+            let elapsedTicks = 0;
+            const totalTicks = 35;
+            const tickInterval = setInterval(() => {
+                if (elapsedTicks < totalTicks) {
+                    playSynthesizedSound('spin_tick');
+                    elapsedTicks++;
+                } else {
+                    clearInterval(tickInterval);
+                }
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(tickInterval);
+                isSpinning = false;
+                countEl.innerText = "0";
+                spinBtn.innerText = "ALREADY SPUN";
+
+                // Calculate actual winning wedge sector
+                const normalizedDeg = randomDegrees % 360;
+                // Target angle alignment offset
+                const targetAngle = (360 - normalizedDeg + 270) % 360; 
+                const sectorIndex = Math.floor(targetAngle / (360 / wheelSectors.length)) % wheelSectors.length;
+                const wonSector = wheelSectors[sectorIndex];
+
+                // Showcase won rewards
+                const panel = document.getElementById('spin-reward-panel');
+                const text = document.getElementById('spin-reward-text');
+                
+                text.innerText = wonSector.prize;
+                panel.classList.remove('hidden');
+
+                if (wonSector.winner) {
+                    playSynthesizedSound('win');
+                    confetti({ particleCount: 100, spread: 80 });
+                    window.showAlert("LEGENDARY SPIN!", `Congrats! You won a physical prize ticket: [${wonSector.prize}]. Send a direct message to our support line at ${WHATSAPP_NUMBER} to request dispatch!`);
+                } else {
+                    playSynthesizedSound('pop');
+                    window.showAlert("Sweet Win", `You unlocked: ${wonSector.prize}! Show off your customized achievement to the snack stand.`);
+                }
+            }, 4000);
         };
 
-        // CORE RAFFLE LOGIC
+
+        // POPCORN FLAVOR SANDBOX MIXER
+        let selectedSeasoning = null;
+        let selectedSkin = 'classic';
+
+        window.setLabSeasoning = (type, displayName) => {
+            playSynthesizedSound('spin_tick');
+            selectedSeasoning = displayName;
+            
+            // Toggle highlight active btns
+            document.querySelectorAll('.seasoning-btn').forEach(b => {
+                b.classList.remove('bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400');
+            });
+            event.target.classList.add('bg-yellow-500/20', 'border-yellow-500/50', 'text-yellow-400');
+            
+            document.getElementById('lab-box-desc').innerText = `infused with: ${displayName}`;
+        };
+
+        window.setLabSkin = (skinName, displayName, accentColor) => {
+            playSynthesizedSound('spin_tick');
+            selectedSkin = skinName;
+
+            document.querySelectorAll('.skin-btn').forEach(b => {
+                b.classList.remove('bg-pink-500/20', 'border-pink-500/50', 'text-pink-400');
+            });
+            event.target.classList.add('bg-pink-500/20', 'border-pink-500/50', 'text-pink-400');
+
+            const container = document.getElementById('lab-preview-box');
+            container.style.borderColor = accentColor;
+            document.getElementById('lab-box-title').innerText = displayName;
+        };
+
+        window.triggerPopAction = () => {
+            if (!selectedSeasoning) {
+                window.showAlert("Lab Alert", "Please select a seasoning seasoning blend to coat your kernels!");
+                return;
+            }
+
+            playSynthesizedSound('pop');
+            const particleContainer = document.getElementById('lab-particles');
+            particleContainer.innerHTML = '';
+
+            // Explode particles inside the canvas window
+            for (let i = 0; i < 35; i++) {
+                const kernel = document.createElement('div');
+                kernel.className = 'kernel';
+                kernel.style.left = '50%';
+                kernel.style.top = '50%';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 120 + 30;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance - 20;
+
+                kernel.animate([
+                    { transform: 'translate(-50%, -50%) scale(0.2)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.5)`, opacity: 0 }
+                ], {
+                    duration: 800 + Math.random() * 400,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)',
+                    fill: 'forwards'
+                });
+
+                particleContainer.appendChild(kernel);
+            }
+
+            setTimeout(() => {
+                playSynthesizedSound('win');
+                confetti({ particleCount: 60, spread: 50 });
+                window.showAlert("POP COMPLETED!", `Your high-fidelity custom popcorn box [${selectedSkin.toUpperCase()}] featuring sweet [${selectedSeasoning}] has successfully finished popping! Take a screenshot to show your master barista.`);
+            }, 600);
+        };
+
+        // RAPID PORTAL CLAIM SYSTEM INTEGRATION
         window.checkCode = async () => {
             if (!currentUser) {
-                showToast("Not authorized/connected!");
+                showToast("Connection to database failed!");
                 return;
             }
             const input = document.getElementById('raffleCode');
             const codeText = input.value.trim().toUpperCase();
             if (!codeText) return;
 
-            // Sanitize checking to prevent Firestore document lookup crashes
             if (!/^[A-Z0-9]+$/.test(codeText)) {
-                showToast("Invalid code characters!");
+                showToast("Invalid code character spacing!");
                 return;
             }
 
             const btn = document.getElementById('submitBtn');
-            btn.disabled = true; btn.innerText = "CHECKING...";
+            btn.disabled = true; btn.innerText = "POPPING CORN...";
 
             try {
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'raffle_codes', codeText);
@@ -653,32 +1296,38 @@
                     const data = docSnap.data();
                     if (data.isUsed) {
                         showToast("Code already used!");
+                        playSynthesizedSound('lose');
                     } else {
                         await updateDoc(docRef, { isUsed: true });
                         displayResult(data, codeText);
                     }
                 } else {
                     showToast("Invalid code!");
+                    playSynthesizedSound('lose');
                 }
             } catch (err) { 
                 console.error("Check coupon error: ", err);
-                showToast("System Error"); 
+                showToast("System Network Timeout"); 
             } finally {
-                btn.disabled = false; btn.innerText = "CHECK CODE";
+                btn.disabled = false; btn.innerText = "POP CODES!";
             }
         };
 
         function displayResult(data, codeText) {
-            showView('view-result');
+            document.getElementById('view-raffle').classList.add('hidden');
+            const viewResult = document.getElementById('view-result');
+            viewResult.classList.remove('hidden');
+
             const icon = document.getElementById('result-icon');
             const title = document.getElementById('result-title');
             const prize = document.getElementById('result-prize');
             const claimBtn = document.getElementById('claim-prize-btn');
 
             if (data.isWinner) {
+                playSynthesizedSound('win');
                 icon.innerText = "🏆";
                 title.innerText = "WINNER!";
-                title.className = "brand-font text-6xl text-yellow-500 mb-2";
+                title.className = "brand-font text-6xl text-yellow-400 mb-2 drop-shadow-md";
                 prize.innerText = data.prize;
                 
                 const message = encodeURIComponent(`Hi! I'm a winner in the Popcorn Magic Raffle! 🍿 My winning code is [${codeText}] and I won: ${data.prize}`);
@@ -686,23 +1335,30 @@
                 claimBtn.classList.remove('hidden');
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             } else {
+                playSynthesizedSound('lose');
                 icon.innerText = "🍿";
                 title.innerText = "TRY AGAIN";
-                title.className = "brand-font text-5xl text-gray-400 mb-2";
-                prize.innerText = "Enjoy your popcorn!";
+                title.className = "brand-font text-5xl text-gray-500 mb-2";
+                prize.innerText = "Enjoy your popcorn! Stay lucky for next packets.";
                 claimBtn.classList.add('hidden');
             }
             lucide.createIcons();
         }
 
-        // ADMIN LOGIC
+        window.resetRaffleView = () => {
+            playSynthesizedSound('spin_tick');
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('view-raffle').classList.remove('hidden');
+        };
+
+        // SECURED STAFF ACTIONS PORTAL
         window.handleAdminLogin = () => {
             const entered = document.getElementById('adminPass').value;
             if (entered === ADMIN_PASSWORD || entered === "      " || (ADMIN_PASSWORD === "admin" && entered.toLowerCase() === "admin")) {
                 showView('view-admin-dashboard');
                 listenToCodes();
+                playSynthesizedSound('win');
                 
-                // Immediately update helper values on input fields
                 setTimeout(() => {
                     const popInput = document.getElementById('offsetPoppedVal');
                     const winInput = document.getElementById('offsetWinnersVal');
@@ -710,18 +1366,19 @@
                     if (winInput) winInput.value = winnersOffset;
                 }, 100);
             } else {
-                window.showAlert("Error", "Unauthorized access password.");
+                playSynthesizedSound('lose');
+                window.showAlert("Error", "Unauthorized access password validation failure.");
             }
         };
 
         window.generateCodes = async () => {
             if (!currentUser) {
-                window.showAlert("Error", "Cannot create codes without an active database connection.");
+                window.showAlert("Error", "Active database authentication required.");
                 return;
             }
             const btn = document.getElementById('genBtn');
             const isWinner = document.getElementById('genWinner').value === 'true';
-            const prize = document.getElementById('genPrize').value || (isWinner ? "Free Popcorn" : "");
+            const prize = document.getElementById('genPrize').value || (isWinner ? "Free Popcorn Box" : "");
 
             if (creatorMode === 'auto') {
                 const qty = parseInt(document.getElementById('genQty').value);
@@ -743,32 +1400,26 @@
                         currentBatchCodes.push(randomCode);
                     }
                     switchAdminTab('new');
-                    window.showAlert("Success", `Created ${qty} new auto-generated codes. They are visible in 'Recently Made'.`);
+                    playSynthesizedSound('win');
+                    window.showAlert("Success", `Registered ${qty} auto-generated coupon codes successfully.`);
                 } catch (err) { 
                     console.error("Batch creation failed:", err);
-                    window.showAlert("Error", "Could not save codes. Check database access rights."); 
+                    window.showAlert("Error", "Failed saving batch creation variables."); 
                 } finally { 
                     btn.disabled = false; 
                 }
             } else {
-                // Custom Code Creation Mode
                 const customInput = document.getElementById('genCustomVal');
                 const customCode = customInput.value.trim().toUpperCase();
                 
                 if (!customCode) {
-                    window.showAlert("Error", "Please type in your custom code first.");
+                    window.showAlert("Error", "Please input custom alphanumeric values.");
                     return;
                 }
 
-                if (!/^[A-Z0-9]+$/.test(customCode)) {
-                    window.showAlert("Error", "Custom codes can only contain letters and numbers (no spaces or special symbols).");
-                    return;
-                }
-
-                // local safety scan for duplicate
                 const duplicateExists = allCodesData.some(c => c.code === customCode);
                 if (duplicateExists) {
-                    window.showAlert("Code Exists", `The code [${customCode}] is already registered in the system.`);
+                    window.showAlert("Code Taken", `Duplicate value registered: [${customCode}]`);
                     return;
                 }
 
@@ -785,32 +1436,30 @@
                     });
                     
                     currentBatchCodes.push(customCode);
-                    customInput.value = ''; // Reset input text area
+                    customInput.value = '';
                     
                     switchAdminTab('new');
-                    window.showAlert("Success", `Custom code [${customCode}] successfully created!`);
+                    playSynthesizedSound('win');
+                    window.showAlert("Success", `Custom promo coupon code [${customCode}] saved!`);
                 } catch (err) {
-                    console.error("Custom creation failed:", err);
-                    window.showAlert("Error", "Could not save custom code.");
+                    window.showAlert("Error", "Failed saving custom codes data structure.");
                 } finally {
                     btn.disabled = false;
                 }
             }
         };
 
+        // LISTEN TO CODES (LIVE UPDATES FOR STATS PANEL)
         function listenToCodes() {
             if (!currentUser) return;
-
-            if (unsubscribeCodes) {
-                unsubscribeCodes();
-            }
+            if (unsubscribeCodes) unsubscribeCodes();
 
             unsubscribeCodes = onSnapshot(query(getCodesCollection()), (snapshot) => {
                 allCodesData = [];
                 snapshot.forEach(doc => allCodesData.push(doc.data()));
                 renderAdminTable();
             }, (err) => {
-                console.error("Listener error in admin sync:", err);
+                console.error("Admin sync fail:", err);
             });
         }
 
@@ -837,7 +1486,6 @@
                 filtered = allCodesData.filter(c => c.isUsed);
             }
 
-            // Newest first
             filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
             if (filtered.length === 0) {
@@ -846,15 +1494,15 @@
                 emptyState.classList.add('hidden');
                 filtered.forEach(c => {
                     const typeIcon = c.isWinner ? '🏆' : '🍿';
-                    const typeColor = c.isWinner ? 'text-yellow-600 font-bold' : 'text-gray-400';
+                    const typeColor = c.isWinner ? 'text-yellow-500 font-bold' : 'text-gray-500';
                     const statusText = c.isUsed ? 'USED' : 'ACTIVE';
                     const statusColor = c.isUsed ? 'text-red-500' : 'text-green-500';
                     
                     tbody.insertAdjacentHTML('beforeend', `
-                        <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                            <td class="py-3 px-1 font-mono font-bold text-gray-800">${c.code}</td>
+                        <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                            <td class="py-3 px-1 font-mono font-bold text-yellow-400">${c.code}</td>
                             <td class="py-3 px-1 text-center ${typeColor}">${typeIcon}</td>
-                            <td class="py-3 px-1 text-gray-500 truncate max-w-[80px]">${c.prize || '-'}</td>
+                            <td class="py-3 px-1 text-gray-400 truncate max-w-[80px]">${c.prize || '-'}</td>
                             <td class="py-3 px-1 text-right font-bold ${statusColor}">${statusText}</td>
                         </tr>
                     `);
@@ -862,8 +1510,83 @@
             }
         }
 
+        window.switchAdminTab = (tab) => {
+            activeAdminTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active', 'border-yellow-500', 'text-yellow-400'));
+            document.getElementById(`tab-${tab}`).classList.add('active', 'border-yellow-500', 'text-yellow-400');
+            renderAdminTable();
+        };
+
+        window.setCreatorMode = (mode) => {
+            creatorMode = mode;
+            const btnAuto = document.getElementById('mode-btn-auto');
+            const btnCustom = document.getElementById('mode-btn-custom');
+            const qtyWrapper = document.getElementById('creator-qty-wrapper');
+            const codeWrapper = document.getElementById('creator-code-wrapper');
+            const btnText = document.getElementById('genBtnText');
+
+            if (mode === 'auto') {
+                btnAuto.className = "py-2 rounded-md text-center transition-all bg-yellow-500 text-black shadow-sm";
+                btnCustom.className = "py-2 rounded-md text-center transition-all text-gray-400 hover:text-white";
+                qtyWrapper.classList.remove('hidden');
+                codeWrapper.classList.add('hidden');
+                btnText.innerText = "CREATE NEW BATCH";
+            } else {
+                btnCustom.className = "py-2 rounded-md text-center transition-all bg-yellow-500 text-black shadow-sm";
+                btnAuto.className = "py-2 rounded-md text-center transition-all text-gray-400 hover:text-white";
+                qtyWrapper.classList.add('hidden');
+                codeWrapper.classList.remove('hidden');
+                btnText.innerText = "SAVE CUSTOM CODE";
+            }
+        };
+
+        window.adjustCounterOffset = async (type, change) => {
+            if (!currentUser) return;
+            const popInput = document.getElementById('offsetPoppedVal');
+            const winInput = document.getElementById('offsetWinnersVal');
+            
+            let currentPopped = parseInt(popInput.value) || 0;
+            let currentWinners = parseInt(winInput.value) || 0;
+            
+            if (type === 'popped') {
+                currentPopped += change;
+                popInput.value = currentPopped;
+            } else if (type === 'winners') {
+                currentWinners += change;
+                winInput.value = currentWinners;
+            }
+            
+            await writeOffsetsToFirebase(currentPopped, currentWinners);
+        };
+
+        window.saveCounterOffsets = async () => {
+            const popInput = document.getElementById('offsetPoppedVal');
+            const winInput = document.getElementById('offsetWinnersVal');
+            let currentPopped = parseInt(popInput.value) || 0;
+            let currentWinners = parseInt(winInput.value) || 0;
+            await writeOffsetsToFirebase(currentPopped, currentWinners);
+        };
+
+        async function writeOffsetsToFirebase(pOffset, wOffset) {
+            try {
+                await setDoc(getSettingsDocRef(), {
+                    poppedOffset: parseInt(pOffset) || 0,
+                    winnersOffset: parseInt(wOffset) || 0
+                }, { merge: true });
+            } catch (err) {
+                console.error("Display offset updating error:", err);
+            }
+        }
+
+        // EASTER EGG POP
+        window.triggerEasterEggPop = () => {
+            playSynthesizedSound('pop');
+            confetti({ particleCount: 30, spread: 40 });
+        };
+
         // GLOBAL HELPERS
-        window.showAlert = (title, msg) => {
+        window.showAlert = (title, msg, icon = "🍿") => {
+            document.getElementById('modal-icon').innerText = icon;
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-message').innerText = msg;
             document.getElementById('alert-modal').classList.add('active');
